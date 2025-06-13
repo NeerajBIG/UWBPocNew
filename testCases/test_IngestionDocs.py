@@ -114,6 +114,10 @@ class Test_HealthCheck:
                     raise Exception
 
                 time.sleep(4)
+                for t in range(1,5):
+                    print("t is: "+str(t))
+                    self.driver.refresh()
+                    time.sleep(4)
 
 
         except Exception as e:
