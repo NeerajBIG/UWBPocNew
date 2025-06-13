@@ -43,3 +43,8 @@ class ReadConfig:
     def getMainReportFolderName():
         FolderName = ReadConfig.config.get('common data', 'MainReportFolderName')
         return FolderName
+
+    @staticmethod
+    def getIngestionFilesFolderName():
+        FolderName = ReadConfig.config.get('common data', 'IngestionFilesFolderName')
+        return FolderName
