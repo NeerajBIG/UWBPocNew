@@ -59,7 +59,7 @@ class Test_HealthCheck:
 
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(email_sender, email_password)
-                #smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
+                smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
                 time.sleep(2)
                 print("Email sent ..................")
 
