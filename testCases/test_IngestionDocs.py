@@ -39,7 +39,7 @@ class Test_HealthCheck:
         email_password = 'gwgc ioef ymbx yybo'
         email_receiver = XLUtils.readDataConfig(self.path, self.sheetName_Config, "EmailReport_To")
         subject = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Subject")
-        body = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Body")
+        body = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Body") + self.basePath
 
         em = EmailMessage()
         em['From'] = email_sender
@@ -114,10 +114,10 @@ class Test_HealthCheck:
                     raise Exception
 
                 time.sleep(4)
-                for t in range(1,5):
+                for t in range(1,2):
                     print("t is: "+str(t))
                     self.driver.refresh()
-                    time.sleep(4)
+                    time.sleep(2)
 
 
         except Exception as e:
