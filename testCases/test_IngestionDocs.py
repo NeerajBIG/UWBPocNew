@@ -39,7 +39,7 @@ class Test_HealthCheck:
         email_password = 'gwgc ioef ymbx yybo'
         email_receiver = XLUtils.readDataConfig(self.path, self.sheetName_Config, "EmailReport_To")
         subject = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Subject")
-        body = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Body") + self.basePath
+        body = XLUtils.readDataConfig(self.path, self.sheetName_Config, "IngestionEmail_Body")
 
         em = EmailMessage()
         em['From'] = email_sender
