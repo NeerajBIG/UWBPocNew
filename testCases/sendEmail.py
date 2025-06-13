@@ -7,11 +7,9 @@ from email.message import EmailMessage
 import smtplib
 import glob
 from utilities import XLUtils
-from utilities.customLogger import LogGen
 from utilities.readProperties import ReadConfig
 
 class Test_SendEmail:
-    logger = LogGen.loggen()
     basePath = ReadConfig.basePath()
     path = basePath + "/TestData/DataAndReport.xlsx"
     sheetName_Config = "Config"
