@@ -30,7 +30,7 @@ class Test_HealthCheck:
             print("Running on Jenkins")
             path1 = os.path.dirname(basePath)
             print("path1 is " + path1)
-            basePath = path1
+            basePath = path1 + "/UWB_test_Ingestion"
         else:
             pass
 
