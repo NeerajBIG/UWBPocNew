@@ -1,5 +1,4 @@
 import os, sys
-from email.mime.application import MIMEApplication
 from os.path import dirname, join, abspath
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from email.message import EmailMessage
@@ -8,36 +7,21 @@ import smtplib
 from testCases.configTest import setup
 from utilities.readProperties import ReadConfig
 from utilities import XLUtils
-import glob
-import shutil
-import stat
+from pageObjects.AllElementLocators import ElementLocators
 
 
 class Test_HealthCheck:
     basePath = ReadConfig.basePath()
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
-    path = basePath + "/TestData/DataAndReport.xlsx"
+    path = dataSheetPath
 
     sheetName_Config = "Config"
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
     baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+
     sheetName_Data = "TestUserData"
-    sheetName_Report = "Report"
-    sheetName_Scenarios = "Scenarios"
-    sheetName_WoData = "WorkOrderData"
-    sheetName_Locators = "Locators"
-
-    testStep = "Launching Application"
-    error = ""
-
-
     ReportFolderName = ReadConfig.getIngestionFilesFolderName()
-    # files = [ReportFolderName, ScreenshotFolderName, DataAndReportFolderName]
-    files = [ReportFolderName]
-
-    MainReportFolderName = ReadConfig.getMainReportFolderName()
-    MainScreenshotFolderName = ReadConfig.getMainScreenshotFolderName()
-    Mainfiles = [MainReportFolderName, MainScreenshotFolderName]
+    sheetName_Locators = "Locators"
 
     path1 = basePath
     text = path1.split("/")
@@ -66,40 +50,71 @@ class Test_HealthCheck:
         em.set_content(body)
 
         try:
-
-            for f in self.files:
-                os.chmod(self.basePath + "/" + f, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
-                with open(self.basePath + "/" + f , 'rb') as f1:
-                    file_data = f1.read()
-                em.add_attachment(file_data, maintype='text', subtype='plain', filename=f)
-
-            # for filename in os.listdir(self.basePath + "/" + self.ReportFolderName):
-            #     file_path = os.path.join(self.basePath + "/" + self.ReportFolderName, filename)
-            #     if os.path.isfile(file_path):
-            #         with open(file_path, "rb") as file:
-            #             attachment = MIMEApplication(file.read(), Name=filename)
-            #             em.attach(attachment)
+            for (root, dirs, file) in os.walk(self.basePath + "/" + self.ReportFolderName):
+                for filename in file:
+                    print(filename)
+                    with open(self.basePath + "/" + self.ReportFolderName + "/" +filename , 'rb') as f1:
+                        file_data = f1.read()
+                    em.add_attachment(file_data, maintype='text', subtype='plain', filename=filename)
 
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(email_sender, email_password)
-                smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
-                time.sleep(5)
+                #smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
+                time.sleep(2)
                 print("Email sent ..................")
 
-            # for f in self.files:
-            #     os.remove(self.basePath + "/" + f + ".zip")
+                #-------Reading data ingestion on Appian frontend application
+                # ---------Initiating WebDriver and Launching Application
+                self.driver = setup
+                self.driver.get(self.baseURL)
+                self.lp = ElementLocators(self.driver)
+                self.user = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
+                                                         "username_" + self.Env)
+                self.password = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
+                                                             "password_" + self.Env)
+                # ---------Entering Username
+                self.testStep = "Entering Username"
+                try:
+                    locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
+                                                           "textbox_username_id")
+                    self.lp.inputData(locator, self.user)
+                except:
+                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    raise Exception
 
-            # Mainfiles = self.Mainfiles
-            # for f1 in Mainfiles:
-            #     files = glob.glob(self.basePath + "/" + f1)
-            #     for f2 in files:
-            #         shutil.rmtree(f2)
-            #         pass
+                # ---------Entering Password
+                self.testStep = "Entering Password"
+                try:
+                    locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
+                                                           "textbox_password_id")
+                    self.lp.inputData(locator, self.password)
+                except:
+                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    raise Exception
 
-            # Mainfiles1 = self.Mainfiles
-            # for f2 in Mainfiles1:
-            #     os.mkdir(self.basePath + "/" + f2)
-            #     pass
+                # ---------Clicking Login button
+                self.testStep = "Clicking Login button"
+                try:
+                    locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
+                                                           "button_login_xpath")
+                    self.lp.performClick(locator)
+                except:
+                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    raise Exception
+
+                time.sleep(1)
+                # ---------Clicking Home link text
+                self.testStep = "Clicking Home link text"
+                try:
+                    locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
+                                                           "LinkText_home")
+                    self.lp.performClick(locator)
+                except:
+                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    raise Exception
+
+                time.sleep(4)
+
 
         except Exception as e:
             print("Email not sent ..................")
