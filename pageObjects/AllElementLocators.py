@@ -179,7 +179,7 @@ class ElementLocators:
         up = "Test"
 
         # --Left side image
-        pdf.image('C:/Users/neera/PycharmProjects/UWB2/utilities/BitsInGlassLogo.png', 5, 5,
+        pdf.image(basePath+'/utilities/BitsInGlassLogo.png', 5, 5,
                        33)  # (path, x, y, width)
         # --Right side image
         # self.pdf.image('C:/Users/neera/PycharmProjects/UWB2/utilities/BitsInGlassLogo.png', 173, 5,
