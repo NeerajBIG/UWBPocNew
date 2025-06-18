@@ -131,6 +131,7 @@ class ElementLocators:
         plt.close()
 
     def createPDaF(self, ScenarioName, ScenarioTitle, ):
+        global JenkinsJobName
         basePath = ReadConfig.basePath()
         dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
         sheetName_Config = "Config"
@@ -152,6 +153,9 @@ class ElementLocators:
                 path = os.path.dirname(basePath)
                 print("path is " + path)
                 basePath = path
+                JenkinsJobName = os.getenv("JOB_NAME")
+                print(os.getenv("JOB_NAME"))
+                basePath = basePath +"/"+JenkinsJobName
             else:
                 pass
         output_file_name = output_pdf
