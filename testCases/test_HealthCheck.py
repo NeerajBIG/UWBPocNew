@@ -1,7 +1,6 @@
 import os
 import sys
 from os.path import dirname, join, abspath
-from testCases.testResultData import testResult
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 import inspect
 import time
@@ -10,6 +9,7 @@ from testCases.configTest import setup
 from utilities.readProperties import ReadConfig
 from utilities import XLUtils
 from datetime import datetime
+from testCases.testResultData import testResult
 
 
 class Test_HealthCheck:
