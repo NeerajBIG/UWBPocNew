@@ -1,6 +1,6 @@
 import os, sys
 from os.path import dirname, join, abspath
-import tzlocal
+#import tzlocal
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from datetime import datetime
 import inspect
@@ -191,7 +191,7 @@ class ElementLocators:
 
         pdf.set_font('Arial', 'B', RightSectionSize)
         pdf.cell(190, 5, txt="Report Timestamp: " + str(
-            StartTime.strftime("%m-%d-%Y, %H:%M:%S")) + " " + tzlocal.get_localzone_name(), ln=True, align='R')
+            StartTime.strftime("%m-%d-%Y, %H:%M:%S")) , ln=True, align='R')
 
         pdf.set_font('Arial', 'B', RightSectionSize)
         pdf.set_text_color(0, 0, 255)
