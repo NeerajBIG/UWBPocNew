@@ -304,6 +304,8 @@ class Test_HealthCheck:
                         print("Running on Jenkins")
                         path = os.path.dirname(self.basePath)
                         print("path is " + path)
+                        JenkinsJobName = os.getenv("JOB_NAME")
+                        path = path + "/" + JenkinsJobName
                     else:
                         pass
                 #self.driver.save_screenshot(path + "/Screenshots/" + screenshotFile)

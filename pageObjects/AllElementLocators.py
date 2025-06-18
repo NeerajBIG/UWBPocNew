@@ -154,7 +154,6 @@ class ElementLocators:
                 print("path is " + path)
                 basePath = path
                 JenkinsJobName = os.getenv("JOB_NAME")
-                print(os.getenv("JOB_NAME"))
                 basePath = basePath +"/"+JenkinsJobName
             else:
                 pass
