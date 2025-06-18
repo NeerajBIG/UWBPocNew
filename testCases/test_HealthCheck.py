@@ -1,5 +1,7 @@
-import os, sys
+import os
+import sys
 from os.path import dirname, join, abspath
+from testCases.testResultData import testResult
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 import inspect
 import time
@@ -31,13 +33,14 @@ class Test_HealthCheck:
         StartTime = datetime.now()
         now = datetime.now()
         current_time = now.strftime("h%Hm%Ms%S")
-
-        Enable = scenarioDataList[2]
-
+        ScenarioName = scenarioDataList[1]
+        ScenarioTitle = scenarioDataList[2]
+        Enable = scenarioDataList[3]
 
         if Enable is True:
             try:
                 # ==================================== Common Steps 1 ====================================
+
                 # ---------Initiating WebDriver and Launching Application
                 self.driver = setup
                 self.driver.get(self.baseURL)
@@ -46,26 +49,34 @@ class Test_HealthCheck:
                                                          "username_" + self.Env)
                 self.password = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
                                                              "password_" + self.Env)
+
+                self.lp1 = testResult()
+
                 # ---------Entering Username
-                self.testStep = "Entering Username"
+                self.testStep = "To verify data input to username field"
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                              "textbox_username_id")
                     self.lp.inputData(locator, self.user)
+                    self.lp1.testResultMeth(self.testStep, "Passed")
                 except:
                     self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    self.lp1.testResultMeth(self.testStep, "Failed")
                     raise Exception
 
                 # ---------Entering Password
-                self.testStep = "Entering Password"
+                self.testStep = "To verify data input to password field"
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "textbox_password_id")
                     self.lp.inputData(locator, self.password)
+                    self.lp1.testResultMeth(self.testStep, "Failed")
                 except:
                     self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    self.lp1.testResultMeth( self.testStep, "Failed")
                     raise Exception
 
+                self.driver.close()
                 # ---------Clicking Login button
                 self.testStep = "Clicking Login button"
                 try:
@@ -281,7 +292,10 @@ class Test_HealthCheck:
                 print(StepLog)
                 time.sleep(5)
 
+
+                self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
             except Exception as e:
+                print("Inside Exception-----1")
                 screenshotFile = type(self).__name__ + "[" + inspect.stack()[0][3] + "-" + current_time + "].png"
                 path = self.basePath
                 text = path.split("/")
@@ -292,12 +306,14 @@ class Test_HealthCheck:
                         print("path is " + path)
                     else:
                         pass
-                self.driver.save_screenshot(path + "/Screenshots/" + screenshotFile)
+                #self.driver.save_screenshot(path + "/Screenshots/" + screenshotFile)
                 self.errorMessage = "######## Test case failed due to " + self.error + ". Screenshot file: " + screenshotFile + " is present in screenshots folder attached"
                 EndTime = datetime.now()
                 XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                         scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
 
+                print("Inside Exception-----2")
+                self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
                 self.driver.close()
                 assert False
 

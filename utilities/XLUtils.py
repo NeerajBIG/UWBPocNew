@@ -55,22 +55,22 @@ def readDataTestUserDataTriForce(file, sheetName, ToFind):
                 break
 
 
-def readWorkOrderData(file, sheetName, ToFind):
+def readXLData(file, sheetName):
     workbook = openpyxl.load_workbook(file)
     sheet = workbook[sheetName]
     rows = sheet.max_row
-    print("xrows is " + str(rows))
     columns = sheet.max_column
-    print("xcolumns is " + str(columns))
-    dataList = []
-    for r in range(2, rows + 1):
+    dataList = {}
+    for r in range(1, rows + 1):
         for c1 in range(1, columns + 1):
             data = sheet.cell(row=r, column=c1).value
             if data is None or data == "None":
                 pass
             else:
-                dataList.append(data)
-        return dataList
+                dataValue = sheet.cell(row=r, column=c1+1).value
+                dataList[data]=dataValue
+                #print(dataList)
+    return dataList
 
 
 def readDataScenarios(file, sheetName, ToFind):
@@ -88,7 +88,7 @@ def readDataScenarios(file, sheetName, ToFind):
                     if data is None or data == "None":
                         pass
                     else:
-                        if c1 > 3:
+                        if c1 > 4:
                             data = data[data.find("$-") + len("$-"):data.rfind("-$")]
                         dataList.append(data)
                 return dataList

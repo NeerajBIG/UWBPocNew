@@ -1,5 +1,6 @@
 import os, sys
 from os.path import dirname, join, abspath
+import tzlocal
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from datetime import datetime
 import inspect
@@ -14,6 +15,7 @@ from utilities.readProperties import ReadConfig
 import time
 import matplotlib.pyplot as plt
 from fpdf import FPDF
+from testCases.testResultData import testResult
 
 
 class ElementLocators:
@@ -49,20 +51,6 @@ class ElementLocators:
                 time.sleep(1)
                 clickObj = self.driver.find_element(By.XPATH, xpath)
                 self.driver.execute_script("arguments[0].click();", clickObj)
-            # start_time = time.time()
-            # loopCounter = 5
-            # for item in range (0, loopCounter):
-            #     if time.time() - start_time > 5:
-            #         print("Loop timed out")
-            #         break
-            #     try:
-            #         self.driver.find_element(By.XPATH, "//div[@class='SailContainerWeb---sailcontents appian-context-browser-chrome appian-context-os-windows appian-context-ux-responsive' and @id='sitesBody']").is_displayed()
-            #         print("********************Loader exist******************")
-            #         break
-            #     except Exception as ee1:
-            #         print("Not present" + str(ee1))
-            #     print(item)
-            #     time.sleep(0.5)
         except Exception as ee:
             print("Test scenario failed at step: " + inspect.stack()[0][3])
             print("Element locator used: " + str(xpath))
@@ -142,15 +130,20 @@ class ElementLocators:
         plt.savefig(image_path)
         plt.close()
 
-    def createPDF(self, ele_name, descrp, file_name):
-        pdf = FPDF()
-        textHeight = 5
-        posX = 10
-        posY = 10
-        pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15)
-
+    def createPDaF(self, ScenarioName, ScenarioTitle, ):
         basePath = ReadConfig.basePath()
+        dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
+        sheetName_Config = "Config"
+        Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
+        baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+        ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
+
+        # --Pdf Report configuration
+        ReportHeader = "Testing Report - " + ScenarioName
+        ReportIntroduction = ScenarioTitle
+        ReportMethodology = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ReportMethodology")
+        output_pdf = ApplicationName.replace(" ", "") + "_"+ScenarioName+"-Output_Report"
+
         path = basePath
         text = path.split("/")
         for t in text:
@@ -161,46 +154,101 @@ class ElementLocators:
                 basePath = path
             else:
                 pass
-        output_file_name = file_name
+        output_file_name = output_pdf
         pdf_path = basePath + "/Reports/" + output_file_name + ".pdf"
 
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        RightSectionSize = 7
+        LeftSectionSize = 7
+
+        StartTime = datetime.now()
+
+        # network = speedtest.Speedtest(secure=True)
+        # down = network.download() / 1000000
+        # up = network.upload() / 1000000
+        # best = network.get_best_server()
+        # print(f"Found: {best['host']} located in {best['country']}")
+        # print("Download Speed: {:.2f} Mbps".format(down))
+        # print("Upload Speed: {:.2f} Mbps".format(up))
+        # down = "Download Speed: {:.2f} Mbps".format(down)
+        # up = "Upload Speed: {:.2f} Mbps".format(up)
+
+        down = "Test"
+        up = "Test"
+
+        # --Left side image
+        pdf.image('C:/Users/neera/PycharmProjects/UWB2/utilities/BitsInGlassLogo.png', 5, 5,
+                       33)  # (path, x, y, width)
+        # --Right side image
+        # self.pdf.image('C:/Users/neera/PycharmProjects/UWB2/utilities/BitsInGlassLogo.png', 173, 5,
+        #                33, 10)  # (path, x, y, width)
+
+        # --Top right side section
         pdf.set_font('Arial', 'B', 12)
-        #---------Adding Title to the PDF
-        pdf.cell(0, posX, 'Tricon - Load Time Report - Env: ' + self.Env + ' Generated on ' + str(
-            datetime.now().strftime("%m/%d/%Y T%H:%M")), 0, 1, 'C')
-        var = 0
+        pdf.cell(200, 15, txt=ReportHeader, ln=True, align='C')
 
-        imageHeight = 0
-        count = len(ele_name)
-        for i in range(count):
-            lineMultiple = len(descrp[i]) // 128
-            if i == 0:
-                var = var + 10
-            else:
-                if (i % 2) == 0:
-                    pdf.add_page()
-                    var = 10
-                else:
-                    var = imageHeight + var + 10
+        pdf.set_font('Arial', 'B', RightSectionSize)
+        pdf.cell(190, 5, txt="Report Timestamp: " + str(
+            StartTime.strftime("%m-%d-%Y, %H:%M:%S")) + " " + tzlocal.get_localzone_name(), ln=True, align='R')
 
-            #image_path = basePath + "/Reports/" + ele_name[i] + ".png"
-            image_path = "C:/Users/neera/PycharmProjects/TriconFSM/utilities/BitsInGlassLogo.png"
+        pdf.set_font('Arial', 'B', RightSectionSize)
+        pdf.set_text_color(0, 0, 255)
+        pdf.cell(190, 5, txt="Testing URL: " + baseURL, ln=True, align='R')
+        pdf.set_text_color(0, 0, 0)
 
-            pdf.set_xy(posX, posY + var)
-            #---------Adding Content above the graph in the PDF
-            body = str(i + 1) + ") " + descrp[i]
-            pdf.set_font('Arial', '', 9)
-            pdf.multi_cell(0, textHeight, body)
+        pdf.set_font('Arial', 'B', RightSectionSize)
+        pdf.cell(190, 5, txt="Testing Environment: " + Env, ln=True, align='R')
 
-            var = var + 10
-            if lineMultiple > 1:
-                var = var + (lineMultiple * 5)
-            pdf.set_xy(posX, posY + var)
-            #---------Adding Graph image to the PDF
-            image_width = 120
-            page_width = pdf.w - 2 * pdf.l_margin
-            center_x = (page_width - image_width) / 2
-            pdf.image(image_path, x=center_x + 7, y=posY + var, w=image_width)
-            imageHeight = 90
+        pdf.set_font('Arial', 'B', RightSectionSize)
+        pdf.cell(190, 5, txt="Current Network Speed: " + str(up) + " " + str(down), ln=True, align='R')
+
+        # -Setting report Introduction
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "Test Introduction", ln=True, align='L')
+        pdf.set_font('Arial', '', 10)
+        pdf.multi_cell(0, 5, ReportIntroduction, 0, 'L')
+
+        # -Setting report Methodology
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "Test Methodology", ln=True, align='L')
+        pdf.set_font('Arial', '', 10)
+        pdf.multi_cell(0, 5, ReportMethodology, 0, 'L')
+
+        # -Setting report Summary
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "Test Summary", ln=True, align='L')
+        pdf.set_font('Arial', '', 10)
+
+        lp1 = testResult()
+
+        finalDic = lp1.testResultMeth("None", "None")
+
+        # for key, value in finalDic:
+        dicKeys = list(finalDic.keys())[:200]
+
+        for i in range (1, len(dicKeys)+1):
+            pdf.set_text_color(0, 0, 0)
+            if str(dicKeys[i-1]) != "None":
+                pdf.multi_cell(0, 5, "* "+ str(dicKeys[i-1]), 0, 'L')
+                if str(finalDic[dicKeys[i - 1]]) == "Passed":
+                    pdf.set_text_color(0, 128, 0)
+                elif str(finalDic[dicKeys[i - 1]]) == "Failed":
+                    pdf.set_text_color(255, 0, 0)
+                pdf.multi_cell(0, 5, " Result: " + str(finalDic[dicKeys[i - 1]]), 0,
+                           'L')
+                pdf.multi_cell(0, 5, " ", 0, 'L')
+
+        # --Bottom left side section
+        pdf.set_font('Arial', 'B', LeftSectionSize)
+        pdf.cell(0, 15, txt=" ", ln=True, align='L')
+        pdf.cell(0, 5, txt="Note: ", ln=True, align='L')
+        pdf.cell(0, 5, txt="1) Python version: 3.11", ln=True, align='L')
+        pdf.cell(0, 5, txt="2) Jenkins version: 2.514", ln=True, align='L')
+        pdf.set_text_color(0, 0, 255)
+        pdf.cell(0, 5, txt="To understand more about jenkins, click here", ln=True, align='L',
+                      link='https://www.jenkins.io/')
 
         pdf.output(pdf_path)
+        print(f"PDF created successfully")

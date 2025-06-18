@@ -13,15 +13,15 @@ class Test_SendEmail:
     basePath = ReadConfig.basePath()
     path = basePath + "/TestData/DataAndReport.xlsx"
     sheetName_Config = "Config"
-    ReportFolderName = ReadConfig.getReportFolderName()
-    ScreenshotFolderName = ReadConfig.getScreenshotFolderName()
-    DataAndReportFolderName = ReadConfig.getDataAndReportFolderName()
+    ReportFolderName = XLUtils.readDataConfig(path, sheetName_Config, "EmailReport_FolderName")
+    # ScreenshotFolderName = ReadConfig.getScreenshotFolderName()
+    # DataAndReportFolderName = ReadConfig.getDataAndReportFolderName()
     #files = [ReportFolderName, ScreenshotFolderName, DataAndReportFolderName]
     files = [ReportFolderName]
 
-    MainReportFolderName = ReadConfig.getMainReportFolderName()
-    MainScreenshotFolderName = ReadConfig.getMainScreenshotFolderName()
-    Mainfiles = [MainReportFolderName, MainScreenshotFolderName]
+    # MainReportFolderName = ReadConfig.getMainReportFolderName()
+    # MainScreenshotFolderName = ReadConfig.getMainScreenshotFolderName()
+    # Mainfiles = [MainReportFolderName, MainScreenshotFolderName]
 
     path1 = basePath
     text = path1.split("/")
@@ -50,30 +50,19 @@ class Test_SendEmail:
         em.set_content(body)
 
         try:
-            for f in self.files:
-                with open(self.basePath+"/"+f+".zip", 'rb') as f1:
-                    file_data = f1.read()
-                em.add_attachment(file_data, maintype='text', subtype='plain', filename=f+".zip")
+            for (root, dirs, file) in os.walk(self.basePath + "/" + self.ReportFolderName):
+                for filename in file:
+                    print(filename)
+                    with open(self.basePath + "/" + self.ReportFolderName + "/" + filename, 'rb') as f1:
+                        file_data = f1.read()
+                    em.add_attachment(file_data, maintype='text', subtype='plain', filename=filename)
+
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(email_sender, email_password)
                 smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
-                time.sleep(5)
+                time.sleep(2)
+
                 print("Email sent ..................")
-
-            for f in self.files:
-                os.remove(self.basePath+"/"+f+".zip")
-
-            Mainfiles = self.Mainfiles
-            for f1 in Mainfiles:
-                files = glob.glob(self.basePath + "/" + f1)
-                for f2 in files:
-                    shutil.rmtree(f2)
-                    pass
-
-            Mainfiles1 = self.Mainfiles
-            for f2 in Mainfiles1:
-                os.mkdir(self.basePath + "/" + f2)
-                pass
 
         except Exception as e:
             print("Email not sent ..................")
