@@ -31,6 +31,8 @@ class Test_SendEmail:
             path1 = os.path.dirname(basePath)
             print("path1 is " + path1)
             basePath = path1
+            JenkinsJobName = os.getenv("JOB_NAME")
+            basePath = basePath + "/" + JenkinsJobName
         else:
             pass
 
