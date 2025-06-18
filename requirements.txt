@@ -9,3 +9,4 @@ speedtest-cli
 fpdf~=1.7.2
 matplotlib~=3.9.2
 pyjavaproperties~=0.7
+tzlocal~=5.3.1
