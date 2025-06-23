@@ -54,26 +54,32 @@ class Test_HealthCheck:
 
                 # ---------Entering Username
                 self.testStep = "To verify data input to username field"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                              "textbox_username_id")
                     self.lp.inputData(locator, self.user)
-                    self.lp1.testResultMeth(self.testStep, "Passed")
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName)
                 except:
                     self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    self.lp1.testResultMeth(self.testStep, "Failed")
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName)
                     raise Exception
 
                 # ---------Entering Password
                 self.testStep = "To verify data input to password field"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "textbox_password_id")
                     self.lp.inputData(locator, self.password)
-                    self.lp1.testResultMeth(self.testStep, "Failed")
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName)
                 except:
                     self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    self.lp1.testResultMeth( self.testStep, "Failed")
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth( self.testStep, "Failed", screenshotName)
                     raise Exception
 
                 self.driver.close()

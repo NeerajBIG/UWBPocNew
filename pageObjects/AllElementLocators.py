@@ -130,6 +130,11 @@ class ElementLocators:
         plt.savefig(image_path)
         plt.close()
 
+    def takeScreenshot(self, name):
+        basePath = ReadConfig.basePath()
+        screenshotPath = basePath + "/Screenshots"
+        self.driver.save_screenshot(screenshotPath + "/"+name + ".png")
+
     def createPDaF(self, ScenarioName, ScenarioTitle, ):
         global JenkinsJobName
         basePath = ReadConfig.basePath()
@@ -226,21 +231,26 @@ class ElementLocators:
 
         lp1 = testResult()
 
-        finalDic = lp1.testResultMeth("None", "None")
+        finalDic = lp1.testResultMeth("None", "None", "None")
 
         # for key, value in finalDic:
         dicKeys = list(finalDic.keys())[:200]
 
         for i in range (1, len(dicKeys)+1):
+            pdf.set_font('Arial', '', 10)
             pdf.set_text_color(0, 0, 0)
             if str(dicKeys[i-1]) != "None":
                 pdf.multi_cell(0, 5, "* "+ str(dicKeys[i-1]), 0, 'L')
-                if str(finalDic[dicKeys[i - 1]]) == "Passed":
+                if str(finalDic[dicKeys[i - 1]].split('^')[0]) == "Passed":
                     pdf.set_text_color(0, 128, 0)
-                elif str(finalDic[dicKeys[i - 1]]) == "Failed":
+                elif str(finalDic[dicKeys[i - 1]].split('^')[0]) == "Failed":
                     pdf.set_text_color(255, 0, 0)
-                pdf.multi_cell(0, 5, " Result: " + str(finalDic[dicKeys[i - 1]]), 0,
+                pdf.multi_cell(0, 5, " Result: " + str(finalDic[dicKeys[i - 1]].split('^')[0]), 0,
                            'L')
+                pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^')[1])+".png")
+                pdf.set_text_color(0, 0, 0)
+                pdf.set_font('Arial', '', 7)
+                pdf.multi_cell(0, 5, "Right click on image and select Open link in new tab", 0, 'L')
                 pdf.multi_cell(0, 5, " ", 0, 'L')
 
         # --Bottom left side section

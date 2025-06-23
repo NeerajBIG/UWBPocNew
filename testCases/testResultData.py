@@ -7,6 +7,6 @@ sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 class testResult:
     dic = {}
 
-    def testResultMeth(self, TestStep, StepResult):
-        self.dic[TestStep] = StepResult
+    def testResultMeth(self, TestStep, StepResult, screenshotName):
+        self.dic[TestStep] = StepResult+"^"+screenshotName
         return self.dic
