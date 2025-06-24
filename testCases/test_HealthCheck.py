@@ -36,36 +36,41 @@ class Test_HealthCheck:
         ScenarioName = scenarioDataList[1]
         ScenarioTitle = scenarioDataList[2]
         Enable = scenarioDataList[3]
+        locator = "None"
+        # ---------Initiating WebDriver and Launching Application
+        self.driver = setup
+        self.driver.get(self.baseURL)
+        self.lp = ElementLocators(self.driver)
+        self.lp1 = testResult()
+
+        # ---------Deleting all screenshots
+        self.lp.deleteScreenshot()
 
         if Enable is True:
             try:
-                # ==================================== Common Steps 1 ====================================
-
-                # ---------Initiating WebDriver and Launching Application
-                self.driver = setup
-                self.driver.get(self.baseURL)
-                self.lp = ElementLocators(self.driver)
+                # ---------Entering Username
+                self.testStep = "To verify data input to username field"
+                screenshotName = self.testStep.replace(" ", "")
                 self.user = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
                                                          "username_" + self.Env)
                 self.password = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
                                                              "password_" + self.Env)
-
-                self.lp1 = testResult()
-
-                # ---------Entering Username
-                self.testStep = "To verify data input to username field"
-                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                              "textbox_username_id")
                     self.lp.inputData(locator, self.user)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName)
-                    raise Exception
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Entering Password
                 self.testStep = "To verify data input to password field"
@@ -75,221 +80,469 @@ class Test_HealthCheck:
                                                            "textbox_password_id")
                     self.lp.inputData(locator, self.password)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth( self.testStep, "Failed", screenshotName)
-                    raise Exception
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
-                self.driver.close()
                 # ---------Clicking Login button
                 self.testStep = "Clicking Login button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_login_xpath")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath, self.sheetName_Locators,
+                                                           "button_login_xpath")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Home link text
                 self.testStep = "Clicking Home link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_home")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_home")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Cases link text
                 self.testStep = "Clicking Cases link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_Cases")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_Cases")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : "+str(locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Users link text
                 self.testStep = "Clicking Users link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_Users")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_Users")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Monitoring link text
                 self.testStep = "Clicking Monitoring link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_Monitoring")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_Monitoring")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Notes link text
                 self.testStep = "Clicking Notes link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_Notes")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_Notes")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 #----------Inside Case Numbers---------
                 time.sleep(1)
                 # ---------Clicking Home link text
                 self.testStep = "Clicking Home link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_home")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_home")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ----------Clicking Case Number (Unassigned)
                 time.sleep(1)
                 # ---------Clicking Case Number  link text
                 self.testStep = "Clicking Case Number  link text"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "LinkText_CaseNumberUnassigned")
-                    Data = scenarioDataList[3] + "']"
-                    self.lp.performClick(locator + Data)
+                    Data = scenarioDataList[4] + "']"
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "LinkText_CaseNumberUnassigned")
+                    self.lp.performClick(locator + Data, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Summary tab
                 self.testStep = "Clicking Summary tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Summary")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Summary")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Documents tab
                 self.testStep = "Clicking Documents tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Documents")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Documents")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Communication tab
                 self.testStep = "Clicking Communication tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Communication")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Communication")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Notes tab
                 self.testStep = "Clicking Notes tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Notes")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Notes")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking SmartIngestionAudit tab
                 self.testStep = "Clicking SmartIngestionAudit tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_SmartIngestionAudit")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_SmartIngestionAudit")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 #----------Sections inside Summary Tab
                 time.sleep(1)
                 # ---------Clicking Summary tab
                 self.testStep = "Clicking Summary tab"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Summary")
-                    print(locator)
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Summary")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
-                # ---------Clicking Program Filing / Preparation Button
-                self.testStep = "Clicking Program Filing / Preparation Button"
+                # ---------Clicking Program Filing-Preparation Button
+                self.testStep = "Clicking Program Filing-Preparation Button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_ProgramFilingPreparation")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_ProgramFilingPreparation")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Clicking Upfront Analysis Button
                 self.testStep = "Clicking Upfront Analysis Button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_UpfrontAnalysis")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_UpfrontAnalysis")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Clicking In-depth Analysis Button
                 self.testStep = "Clicking In-depth Analysis Button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_In-depthAnalysis")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_In-depthAnalysis")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Clicking Negotiation & Quotation Button
                 self.testStep = "Clicking Negotiation & Quotation Button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_Negotiation&Quotation")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_Negotiation&Quotation")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Clicking Authorization Refusal Button
                 self.testStep = "Clicking Authorization Refusal Button"
+                screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "button_AuthorizationRefusal")
-                    self.lp.performClick(locator)
+                    locatorConfirmation = XLUtils.readDataTestUserDataConfirmation(self.dataSheetPath,
+                                                                                   self.sheetName_Locators,
+                                                                                   "button_AuthorizationRefusal")
+                    self.lp.performClick(locator, locatorConfirmation)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                 except:
-                    self.error = "No web element found, ref: [ " + self.testStep + " ]"
-                    raise Exception
+                    self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
+                        locator)
+                    EndTime = datetime.now()
+                    self.errorMessage = "Test case failed due to " + self.error
+                    XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                            scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
+                    self.lp.takeScreenshot(screenshotName)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    #raise Exception
 
                 # ---------Ending the test scenario
                 EndTime = datetime.now()
@@ -298,33 +551,12 @@ class Test_HealthCheck:
                 print(StepLog)
                 time.sleep(5)
 
-
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
-            except Exception as e:
-                print("Inside Exception-----1")
-                screenshotFile = type(self).__name__ + "[" + inspect.stack()[0][3] + "-" + current_time + "].png"
-                path = self.basePath
-                text = path.split("/")
-                for t in text:
-                    if t == ".jenkins":
-                        print("Running on Jenkins")
-                        path = os.path.dirname(self.basePath)
-                        print("path is " + path)
-                        JenkinsJobName = os.getenv("JOB_NAME")
-                        path = path + "/" + JenkinsJobName
-                    else:
-                        pass
-                #self.driver.save_screenshot(path + "/Screenshots/" + screenshotFile)
-                self.errorMessage = "######## Test case failed due to " + self.error + ". Screenshot file: " + screenshotFile + " is present in screenshots folder attached"
-                EndTime = datetime.now()
-                XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
-                                        scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
-
+            except:
                 print("Inside Exception-----2")
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
                 self.driver.close()
                 assert False
 
         else:
-
             print("Skipping Scenario Execution for: " + scenarioDataList[0])

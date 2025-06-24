@@ -5,7 +5,6 @@ sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from datetime import datetime
 import inspect
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains, Keys
@@ -23,6 +22,7 @@ class ElementLocators:
     halt = 1
     basePath = ReadConfig.basePath()
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
+    sheetName_Report = "Report"
     sheetName_Config = "Config"
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
 
@@ -42,8 +42,9 @@ class ElementLocators:
             print("Element locator used: " + xpath)
             raise Exception
 
-    def performClick(self, xp):
+    def performClick(self, xp, xpConfirm):
         xpath = str(xp)
+        xpathConfirm = str(xpConfirm)
         try:
             if WebDriverWait(self.driver, self.Time).until(
                     EC.presence_of_element_located(
@@ -51,9 +52,11 @@ class ElementLocators:
                 time.sleep(1)
                 clickObj = self.driver.find_element(By.XPATH, xpath)
                 self.driver.execute_script("arguments[0].click();", clickObj)
+                if WebDriverWait(self.driver, self.Time).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, xpathConfirm))):
+                    pass
         except Exception as ee:
-            print("Test scenario failed at step: " + inspect.stack()[0][3])
-            print("Element locator used: " + str(xpath))
             raise Exception
 
     def dropdownByOne(self, setup):
@@ -129,6 +132,14 @@ class ElementLocators:
         plt.grid(True)
         plt.savefig(image_path)
         plt.close()
+
+    def deleteScreenshot(self):
+        basePath = ReadConfig.basePath()
+        screenshotFolderPath = basePath + "/Screenshots"
+        for filename in os.listdir(screenshotFolderPath):
+            file_path = os.path.join(screenshotFolderPath, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
     def takeScreenshot(self, name):
         basePath = ReadConfig.basePath()
@@ -231,27 +242,32 @@ class ElementLocators:
 
         lp1 = testResult()
 
-        finalDic = lp1.testResultMeth("None", "None", "None")
-
+        finalDic = lp1.testResultMeth("None", "None", "None", "None")
         # for key, value in finalDic:
         dicKeys = list(finalDic.keys())[:200]
-
         for i in range (1, len(dicKeys)+1):
             pdf.set_font('Arial', '', 10)
             pdf.set_text_color(0, 0, 0)
             if str(dicKeys[i-1]) != "None":
                 pdf.multi_cell(0, 5, "* "+ str(dicKeys[i-1]), 0, 'L')
-                if str(finalDic[dicKeys[i - 1]].split('^')[0]) == "Passed":
+                if str(finalDic[dicKeys[i - 1]].split('^-^')[0]) == "Passed":
                     pdf.set_text_color(0, 128, 0)
-                elif str(finalDic[dicKeys[i - 1]].split('^')[0]) == "Failed":
+                elif str(finalDic[dicKeys[i - 1]].split('^-^')[0]) == "Failed":
                     pdf.set_text_color(255, 0, 0)
-                pdf.multi_cell(0, 5, " Result: " + str(finalDic[dicKeys[i - 1]].split('^')[0]), 0,
+                pdf.multi_cell(0, 5, "Result: " + str(finalDic[dicKeys[i - 1]].split('^-^')[0]), 0,
                            'L')
-                pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^')[1])+".png")
+                pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png")
                 pdf.set_text_color(0, 0, 0)
                 pdf.set_font('Arial', '', 7)
-                pdf.multi_cell(0, 5, "Right click on image and select Open link in new tab", 0, 'L')
-                pdf.multi_cell(0, 5, " ", 0, 'L')
+                pdf.multi_cell(0, 4, "Right click on image and select Open link in new tab", 0, 'L')
+                pdf.multi_cell(0, 1, " ", 0, 'L')
+                if str(finalDic[dicKeys[i - 1]].split('^-^')[2]) != "NoException":
+                    pdf.set_font('Arial', '', 10)
+                    pdf.multi_cell(0, 5, "Reason: " + str(finalDic[dicKeys[i - 1]].split('^-^')[2]), 0,
+                                   'L')
+                pdf.set_font('Arial', '', 7)
+                pdf.set_text_color(211, 211, 211)
+                pdf.multi_cell(0, 5, "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 0, 'L')
 
         # --Bottom left side section
         pdf.set_font('Arial', 'B', LeftSectionSize)

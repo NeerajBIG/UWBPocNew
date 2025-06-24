@@ -1,9 +1,7 @@
 import os, sys
 from os.path import dirname, join, abspath
-
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 import openpyxl
-
 
 def readDataConfig(file, sheetName, ToFind):
     workbook = openpyxl.load_workbook(file)
@@ -15,19 +13,6 @@ def readDataConfig(file, sheetName, ToFind):
             if cellData == ToFind:
                 return sheet.cell(row=r, column=c + 1).value
                 break
-
-
-def readDataConfigTriForce(file, sheetName, ToFind):
-    workbook = openpyxl.load_workbook(file)
-    sheet = workbook[sheetName]
-    rows = sheet.max_row
-    for r in range(1, rows + 1):
-        for c in range(1, 2):
-            cellData = sheet.cell(row=r, column=c).value
-            if cellData == ToFind:
-                return sheet.cell(row=r, column=c + 2).value
-                break
-
 
 def readDataTestUserData(file, sheetName, ToFind):
     workbook = openpyxl.load_workbook(file)
@@ -41,8 +26,7 @@ def readDataTestUserData(file, sheetName, ToFind):
                 return sheet.cell(row=r, column=c + 1).value
                 break
 
-
-def readDataTestUserDataTriForce(file, sheetName, ToFind):
+def readDataTestUserDataConfirmation(file, sheetName, ToFind):
     workbook = openpyxl.load_workbook(file)
     sheet = workbook[sheetName]
     rows = sheet.max_row
@@ -53,7 +37,6 @@ def readDataTestUserDataTriForce(file, sheetName, ToFind):
             if cellData == ToFind:
                 return sheet.cell(row=r, column=c + 2).value
                 break
-
 
 def readXLData(file, sheetName):
     workbook = openpyxl.load_workbook(file)
@@ -71,7 +54,6 @@ def readXLData(file, sheetName):
                 dataList[data]=dataValue
                 #print(dataList)
     return dataList
-
 
 def readDataScenarios(file, sheetName, ToFind):
     workbook = openpyxl.load_workbook(file)
