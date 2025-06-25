@@ -257,29 +257,7 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
-                # time.sleep(1)
-                # # ---------Selecting dropdown value in Underwriter Team dropdown
-                # self.testStep = "Clicking Underwriter Team dropdown"
-                # screenshotName = self.testStep.replace(" ", "")
-                # try:
-                #     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
-                #                                            "dropdown_SelectUnderwriterTeam")
-                #     self.lp.dropdownByOne(setup)
-                #     self.lp.takeScreenshot(screenshotName)
-                #     self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
-                # except:
-                #     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
-                #         locator)
-                #     EndTime = datetime.now()
-                #     self.errorMessage = "Test case failed due to " + self.error
-                #     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
-                #                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
-                #     self.lp.takeScreenshot(screenshotName)
-                #     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
-                #     # raise Exception
-
                 print(str(AssignReassignFlag))
-
                 if AssignReassignFlag == 0:
                     time.sleep(1)
                     # ---------Entering Underwriter in textbox
@@ -290,7 +268,7 @@ class Test_ReadEmail:
                         locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                                "textbox_Underwriter")
                         self.lp.inputData(locator, user)
-                        self.lp.performEnter(setup)
+                        self.lp.dropdownByOne(setup)
                         self.lp.takeScreenshot(screenshotName)
                         self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
                     except:
@@ -328,41 +306,41 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
-                # # ---------Reading assignment email sent to Underwriter
-                # imap_url = 'imap.gmail.com'
-                # password = ReadConfig.getUnderwriterPassword1()
-                #
-                # try:
-                #     my_mail = imaplib.IMAP4_SSL(imap_url)
-                #     my_mail.login(user, password)
-                #     my_mail.select('inbox')  # Connect to the inbox.
-                #
-                #     key = 'SUBJECT "Program Assignment"'
-                #     _, data = my_mail.search(None, key)
-                #
-                #     mail_id_list = data[0].split()
-                #     msgs = []
-                #     for num in mail_id_list:
-                #         typ, data = my_mail.fetch(num, '(RFC822)')
-                #         msgs.append(data)
-                #         my_mail.store(num, "+FLAGS", "\\Deleted")
-                #
-                #     for msg in msgs[::-1]:
-                #         for response_part in msg:
-                #             if type(response_part) is tuple:
-                #                 my_msg = email.message_from_bytes(response_part[1])
-                #                 print("---------------------------------------------")
-                #                 print("subject:", my_msg['subject'])
-                #                 print("from:", my_msg['from'])
-                #                 print("body:")
-                #                 for part in my_msg.walk():
-                #                     print(part.get_content_type())
-                #                     if part.get_content_type() == 'text/html':
-                #                         print(part.get_payload())
-                #
-                # except Exception as e:
-                #     print("Connection failed")
-                #     raise
+                    # ---------Reading assignment email sent to Underwriter
+                    imap_url = 'imap.gmail.com'
+                    password = ReadConfig.getUnderwriterPassword1()
+
+                try:
+                    my_mail = imaplib.IMAP4_SSL(imap_url)
+                    my_mail.login(user, password)
+                    my_mail.select('inbox')  # Connect to the inbox.
+
+                    key = 'SUBJECT "Program Assignment"'
+                    _, data = my_mail.search(None, key)
+
+                    mail_id_list = data[0].split()
+                    msgs = []
+                    for num in mail_id_list:
+                        typ, data = my_mail.fetch(num, '(RFC822)')
+                        msgs.append(data)
+                        my_mail.store(num, "+FLAGS", "\\Deleted")
+
+                    for msg in msgs[::-1]:
+                        for response_part in msg:
+                            if type(response_part) is tuple:
+                                my_msg = email.message_from_bytes(response_part[1])
+                                print("---------------------------------------------")
+                                print("subject:", my_msg['subject'])
+                                print("from:", my_msg['from'])
+                                print("body:")
+                                for part in my_msg.walk():
+                                    print(part.get_content_type())
+                                    if part.get_content_type() == 'text/html':
+                                        print(part.get_payload())
+
+                except Exception as e:
+                    print("Connection failed")
+                    raise
 
                 #self.driver.close()
 

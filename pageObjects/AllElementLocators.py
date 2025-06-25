@@ -34,9 +34,9 @@ class ElementLocators:
         try:
             if WebDriverWait(self.driver, self.Time).until(
                     EC.presence_of_element_located(
-                        (By.ID, xpath))):
-                self.driver.find_element(By.ID, xpath).clear()
-                self.driver.find_element(By.ID, xpath).send_keys(data)
+                        (By.XPATH, xpath))):
+                self.driver.find_element(By.XPATH, xpath).clear()
+                self.driver.find_element(By.XPATH, xpath).send_keys(data)
         except Exception as ee:
             print("Test scenario failed at step: " + inspect.stack()[0][3])
             print("Element locator used: " + xpath)
