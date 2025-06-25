@@ -7,6 +7,7 @@ class ReadConfig:
     path = os.path.dirname(os.path.abspath(__file__))
     path = path.rsplit('\\', 1)[0]
     path = path.replace('\\', '/')
+
     config = configparser.RawConfigParser()
     config.read(path+"/Configurations/config.ini")
 
@@ -48,3 +49,23 @@ class ReadConfig:
     def getIngestionFilesFolderName():
         FolderName = ReadConfig.config.get('common data', 'IngestionFilesFolderName')
         return FolderName
+
+    @staticmethod
+    def getUnderwriterEmail1():
+        UnderwriterEmail1 = ReadConfig.config.get('common data', 'UnderwriterEmail1')
+        return UnderwriterEmail1
+
+    @staticmethod
+    def getUnderwriterPassword1():
+        UnderwriterPassword1 = ReadConfig.config.get('common data', 'UnderwriterPassword1')
+        return UnderwriterPassword1
+
+    @staticmethod
+    def getUnderwriterEmail2():
+        UnderwriterEmail2 = ReadConfig.config.get('common data', 'UnderwriterEmail2')
+        return UnderwriterEmail2
+
+    @staticmethod
+    def getUnderwriterPassword2():
+        UnderwriterPassword2 = ReadConfig.config.get('common data', 'UnderwriterPassword2')
+        return UnderwriterPassword2

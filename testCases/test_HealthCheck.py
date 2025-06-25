@@ -550,8 +550,8 @@ class Test_HealthCheck:
                     1] + " completed successfully and ended at " + str(EndTime) + " ########"
                 print(StepLog)
                 time.sleep(5)
-
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
+
             except:
                 print("Inside Exception-----2")
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
