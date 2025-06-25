@@ -306,13 +306,13 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
-                    # ---------Reading assignment email sent to Underwriter
-                    imap_url = 'imap.gmail.com'
-                    password = ReadConfig.getUnderwriterPassword1()
+                # ---------Reading assignment email sent to Underwriter
+                imap_url = 'imap.gmail.com'
+                password = ReadConfig.getUnderwriterPassword1()
 
                 try:
                     my_mail = imaplib.IMAP4_SSL(imap_url)
-                    my_mail.login(user, password)
+                    my_mail.login(self.user, password)
                     my_mail.select('inbox')  # Connect to the inbox.
 
                     key = 'SUBJECT "Program Assignment"'
