@@ -257,17 +257,17 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
-                print(str(AssignReassignFlag))
+                userUnderwriter = "None"
                 if AssignReassignFlag == 0:
                     time.sleep(1)
                     # ---------Entering Underwriter in textbox
                     self.testStep = "Entering Underwriter in textbox"
                     screenshotName = self.testStep.replace(" ", "")
-                    user = ReadConfig.getUnderwriterEmail1()
+                    userUnderwriter = ReadConfig.getUnderwriterEmail1()
                     try:
                         locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                                "textbox_Underwriter")
-                        self.lp.inputData(locator, user)
+                        self.lp.inputData(locator, userUnderwriter)
                         self.lp.dropdownByOne(setup)
                         self.lp.takeScreenshot(screenshotName)
                         self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
@@ -312,7 +312,7 @@ class Test_ReadEmail:
 
                 try:
                     my_mail = imaplib.IMAP4_SSL(imap_url)
-                    my_mail.login(self.user, password)
+                    my_mail.login(userUnderwriter, password)
                     my_mail.select('inbox')  # Connect to the inbox.
 
                     key = 'SUBJECT "Program Assignment"'
