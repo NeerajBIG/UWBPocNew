@@ -70,3 +70,13 @@ class ReadConfig:
     def getUnderwriterPassword2():
         UnderwriterPassword2 = ReadConfig.config.get('common data', 'UnderwriterPassword2')
         return UnderwriterPassword2
+
+    @staticmethod
+    def getReportEmailSender():
+        ReportEmailSender = ReadConfig.config.get('common data', 'ReportEmailSender')
+        return ReportEmailSender
+
+    @staticmethod
+    def getReportPasswordSender():
+        ReportPasswordSender = ReadConfig.config.get('common data', 'ReportPasswordSender')
+        return ReportPasswordSender

@@ -126,6 +126,9 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
+                self.lp.shareReports()
+                self.driver.close()
+
                 # ---------Clicking Login button
                 self.testStep = "Clicking Login button"
                 screenshotName = self.testStep.replace(" ", "")

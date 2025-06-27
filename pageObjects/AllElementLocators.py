@@ -12,7 +12,8 @@ from testCases.configTest import setup
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
 import time
-import matplotlib.pyplot as plt
+from email.message import EmailMessage
+import smtplib
 from fpdf import FPDF
 from testCases.testResultData import testResult
 
@@ -47,6 +48,7 @@ class ElementLocators:
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
     baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
     ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
+    ReportFolderName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "EmailReport_FolderName")
 
     def __init__(self, driver):
         self.driver = driver
@@ -145,6 +147,44 @@ class ElementLocators:
         basePath = ReadConfig.basePath()
         screenshotPath = basePath + "/Screenshots"
         self.driver.save_screenshot(screenshotPath + "/"+name + ".png")
+
+    def shareReports(self):
+        print("Inside Share Reports")
+        basePath = self.basePath
+
+        email_sender = ReadConfig.getReportEmailSender()
+        email_password = ReadConfig.getReportPasswordSender()
+
+        email_receiver = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_To")
+        subject = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_Subject")
+        body = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_Body")
+
+        em = EmailMessage()
+        em['From'] = email_sender
+        print(email_receiver)
+        toaddr = email_receiver.split(",")
+        em['To'] = ', '.join(toaddr)
+        em['subject'] = subject + " - " + time.strftime("%m-%d-%Y")
+        em.set_content(body)
+
+        try:
+            for (root, dirs, file) in os.walk(basePath+ "/" + self.ReportFolderName):
+                for filename in file:
+                    with open(basePath+ "/" + self.ReportFolderName + "/" + filename, 'rb') as f1:
+                        file_data = f1.read()
+                    em.add_attachment(file_data, maintype='text', subtype='plain', filename=filename)
+
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(email_sender, email_password)
+                smtp.sendmail(email_sender, em['To'].split(","), em.as_string())
+                time.sleep(2)
+
+                print("Email sent ..................")
+
+        except Exception as e:
+            print("Email not sent ..................")
+            print(str(e))
+            pass
 
     def createPDaF(self, ScenarioName, ScenarioTitle):
         global JenkinsJobName
