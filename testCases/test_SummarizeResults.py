@@ -10,7 +10,6 @@ class Test_SummarizeResult:
 
     def test_SummarizeResultMeth(self):
         client = OpenAI(api_key='')
-
         pdf_file = open("text.pdf", "rb")
         pdf_reader = PyPDF2.PdfReader(pdf_file)
         page_summary  = "None"
