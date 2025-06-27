@@ -48,7 +48,6 @@ class ElementLocators:
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
     baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
     ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
-    ReportFolderName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "EmailReport_FolderName")
 
     def __init__(self, driver):
         self.driver = driver
@@ -148,16 +147,9 @@ class ElementLocators:
         screenshotPath = basePath + "/Screenshots"
         self.driver.save_screenshot(screenshotPath + "/"+name + ".png")
 
-    def shareReports(self):
+    def shareReports(self,email_sender, email_password, email_receiver, subject, body, Report):
         print("Inside Share Reports")
         basePath = self.basePath
-
-        email_sender = ReadConfig.getReportEmailSender()
-        email_password = ReadConfig.getReportPasswordSender()
-
-        email_receiver = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_To")
-        subject = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_Subject")
-        body = XLUtils.readDataConfig(self.dataSheetPath, self.sheetName_Config, "EmailReport_Body")
 
         em = EmailMessage()
         em['From'] = email_sender
@@ -168,11 +160,12 @@ class ElementLocators:
         em.set_content(body)
 
         try:
-            for (root, dirs, file) in os.walk(basePath+ "/" + self.ReportFolderName):
-                for filename in file:
-                    with open(basePath+ "/" + self.ReportFolderName + "/" + filename, 'rb') as f1:
-                        file_data = f1.read()
-                    em.add_attachment(file_data, maintype='text', subtype='plain', filename=filename)
+            if Report != "None":
+                for (root, dirs, file) in os.walk(basePath+ "/" + Report):
+                    for filename in file:
+                        with open(basePath+ "/" + Report + "/" + filename, 'rb') as f1:
+                            file_data = f1.read()
+                        em.add_attachment(file_data, maintype='text', subtype='plain', filename=filename)
 
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                 smtp.login(email_sender, email_password)
@@ -310,4 +303,4 @@ class ElementLocators:
                       link='https://www.jenkins.io/')
 
         pdf.output(pdf_path)
-        print(f"PDF created successfully")
+        #print(f"PDF created successfully")

@@ -1,8 +1,15 @@
+import os, sys
+from os.path import dirname, join, abspath
+sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
 import time
 import streamlit as st
 import sys
 from os.path import dirname, join, abspath
+
+from pageObjects.AllElementLocators import ElementLocators
+from testCases.configTest import setup
+
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
@@ -12,27 +19,41 @@ from streamlit.components.v1 import html
 
 
 class aaa:
-    ProjectName = "Tricon"
     basePath = ReadConfig.basePath()
-    #st.text("basePath is: " + basePath)
-    text = basePath.split("/")
+    path1 = basePath
+    text = path1.split("/")
     for t in text:
-        if t == "mount":
-            path = basePath.rsplit('/', 1)[0]
+        if t == ".jenkins":
+            print("Running on Jenkins")
+            path = os.path.dirname(basePath)
+            print("path is " + path)
             basePath = path
+            JenkinsJobName = os.getenv("JOB_NAME")
+            basePath = basePath + "/" + JenkinsJobName
         else:
             pass
+
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
+
+    sheetName_Report = "Report"
     sheetName_Config = "Config"
+    sheetName_Data = "TestUserData"
+    sheetName_Scenarios = "Scenarios"
+    sheetName_WoData = "WorkOrderData"
+    sheetName_Locators = "Locators"
 
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
     baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+    ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
+    ProjectName = ApplicationName
     EmailRecipients = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "EmailReport_To")
-
-    sheetName_Data = "TestUserData"
-    sheetName_Report = "Report"
-    sheetName_Scenarios = "Scenarios"
-    testStep = "Launching Application"
+    # text = basePath.split("/")
+    # for t in text:
+    #     if t == "mount":
+    #         path = basePath.rsplit('/', 1)[0]
+    #         basePath = path
+    #     else:
+    #         pass
 
     st.set_page_config(layout="wide")
     st.html("""
@@ -49,49 +70,6 @@ class aaa:
             st.text("Environment URL: " + baseURL)
             #st.text("Email Recipients list: " + EmailRecipients)
 
-            agree = st.checkbox(
-                "Any concern such as excluding yourself from the list or want to be a recipient of the test results ? Send a request below")
-            if agree == True:
-                st.write(
-                    "Choose the option below for the request and describe your concern in the body section. You will be contacted shortly.")
-                email_sender = "neeraj1wayitsol@gmail.com"
-                email_receiver = "neerajpebmaca@gmail.com"
-
-                option = st.selectbox('How can we help?', (
-                'Select an option', 'Add email to the recipient list', 'Removing email from recipient list',
-                'Other Concerns'))
-                st.write('You selected:', option)
-                if option == 'Other Concerns':
-                    st.write("** Please describe your concern in the body section. We will get back to you shortly.")
-                elif option == 'Add email to the recipient list':
-                    st.write("** Please mention the email address to include in the body section.")
-                elif option == 'Removing email from recipient list':
-                    st.write("** Please mention the email address to remove in the body section.")
-                subject = option
-                body = st.text_area('Body')
-                if body == "" or option == 'Select an option':
-                    st.warning("Please describe your concern in the body section.")
-                else:
-                    if st.button("Send Request"):
-                        try:
-                            msg = MIMEText(body)
-                            msg['From'] = email_sender
-                            msg['To'] = email_receiver
-                            msg['Subject'] = ProjectName + ": Request for " + subject
-                            email_password = 'gwgc ioef ymbx yybo'
-
-                            server = smtplib.SMTP('smtp.gmail.com', 587)
-                            server.starttls()
-                            server.login(email_sender, email_password)
-                            server.sendmail(email_sender, email_receiver, msg.as_string())
-                            server.quit()
-
-                            st.success('Email sent successfully! 🚀')
-
-                        except Exception as e:
-                            st.error(f"Email not sent, error occurred. Please send an email externally : {e}")
-
-            #st.text(EmailRecipients)
             person = st.text_input('Validate your email address before running scripts.')
             text = EmailRecipients.split(",")
             for index, t in enumerate(text):
@@ -601,6 +579,58 @@ class aaa:
                 if t == Modules[0]:
                     st.link_button(Modules[0],
                                "https://4162-13-54-100-122.ngrok-free.app/d/qzGpZBdVz/jmeter-performance-testing-dashboard?orgId=1&from=1728154957480&to=1728156757480&var-bucket=Tricon&var-application=TriconAppian&var-measurement=Tricon-QA&var-Environment=QA&var-transaction=Navigating+to+all+Sections", )
+        else:
+            agree = st.checkbox(
+                "Any concern? such as 1) Excluding yourself from the list of recipients or 2) Want to be a recipient for the test results? 3) Other Concern. Send a request below")
+            if agree == True:
+                st.write(
+                    "Choose the option below for the request and describe your concern in the body section. You will be contacted shortly.")
+                email_sender = "neeraj1wayitsol@gmail.com"
+                email_receiver = "neerajpebmaca@gmail.com"
 
+                option = st.selectbox('How can we help?', (
+                    'Select an option', 'Add email to the recipient list', 'Removing email from recipient list',
+                    'Other Concerns'))
+                st.write('You selected:', option)
+                if option == 'Other Concerns':
+                    st.write("** Please describe your concern in the body section. We will get back to you shortly.")
+                elif option == 'Add email to the recipient list':
+                    st.write("** Please mention the email address to include in the body section.")
+                elif option == 'Removing email from recipient list':
+                    st.write("** Please mention the email address to remove in the body section.")
+
+                subject = option
+                body = st.text_area('Body')
+                if body == "" or option == 'Select an option':
+                    st.warning("Please describe your concern in the body section.")
+                else:
+                    if st.button("Send Request"):
+                        try:
+                            driver = setup
+                            #driver.get(baseURL)
+                            lp = ElementLocators(driver)
+                            email_sender = ReadConfig.getReportEmailSender()
+                            email_password = ReadConfig.getReportPasswordSender()
+                            email_receiver = XLUtils.readDataConfig(dataSheetPath, sheetName_Config,
+                                                                    "EmailReport_To")
+                            ReportFolderName = "None"
+                            lp.shareReports(email_sender, email_password, email_receiver, subject, body,
+                                                 ReportFolderName)
+                            # msg = MIMEText(body)
+                            # msg['From'] = email_sender
+                            # msg['To'] = email_receiver
+                            # msg['Subject'] = ProjectName + ": Request for " + subject
+                            # email_password = 'gwgc ioef ymbx yybo'
+                            #
+                            # server = smtplib.SMTP('smtp.gmail.com', 587)
+                            # server.starttls()
+                            # server.login(email_sender, email_password)
+                            # server.sendmail(email_sender, email_receiver, msg.as_string())
+                            # server.quit()
+                            #
+                            # st.success('Email sent successfully! 🚀')
+
+                        except Exception as e:
+                            st.error(f"Email not sent, error occurred. Please send an email externally : {e}")
     if st.button("Reload Page", type="primary"):
         st.rerun()

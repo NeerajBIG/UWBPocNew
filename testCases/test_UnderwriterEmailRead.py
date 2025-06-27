@@ -43,17 +43,6 @@ class Test_ReadEmail:
     testStep = "Launching Application"
     error = ""
 
-    path1 = basePath
-    text = path1.split("/")
-    for t in text:
-        if t == ".jenkins":
-            print("Running on Jenkins")
-            path1 = os.path.dirname(basePath)
-            print("path1 is " + path1)
-            #basePath = path1 + "/UWB_test_Ingestion"
-        else:
-            pass
-
     def test_ReadEmail(self, setup):
 
         scenario_ID = "SC_002"
@@ -125,9 +114,6 @@ class Test_ReadEmail:
                     self.lp.takeScreenshot(screenshotName)
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
-
-                self.lp.shareReports()
-                self.driver.close()
 
                 # ---------Clicking Login button
                 self.testStep = "Clicking Login button"
@@ -392,4 +378,5 @@ class Test_ReadEmail:
                 assert False
 
         else:
+
             print("Skipping Scenario Execution for: " + scenarioDataList[0])
