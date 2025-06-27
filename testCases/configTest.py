@@ -21,10 +21,6 @@ def setup():
         options = webdriver.ChromeOptions()
         driver = webdriver.Chrome(service=service, options=options)
 
-        # options = webdriver.EdgeOptions()
-        # driver = webdriver.Edge(service=service, options=options)
-        #driver = webdriver.Chrome()
-
     elif Run_Mode == "Server":
         GridHUB_URL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "GridHUB_URL")
         print("GridHUB_URL: ", GridHUB_URL)

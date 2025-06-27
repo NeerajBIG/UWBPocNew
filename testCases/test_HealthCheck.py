@@ -14,15 +14,31 @@ from testCases.testResultData import testResult
 
 class Test_HealthCheck:
     basePath = ReadConfig.basePath()
+    path1 = basePath
+    text = path1.split("/")
+    for t in text:
+        if t == ".jenkins":
+            print("Running on Jenkins")
+            path = os.path.dirname(basePath)
+            print("path is " + path)
+            basePath = path
+            JenkinsJobName = os.getenv("JOB_NAME")
+            basePath = basePath + "/" + JenkinsJobName
+        else:
+            pass
+
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
-    sheetName_Config = "Config"
-    Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
-    baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
-    sheetName_Data = "TestUserData"
+
     sheetName_Report = "Report"
+    sheetName_Config = "Config"
+    sheetName_Data = "TestUserData"
     sheetName_Scenarios = "Scenarios"
     sheetName_WoData = "WorkOrderData"
     sheetName_Locators = "Locators"
+
+    Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
+    baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+    ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
 
     testStep = "Launching Application"
     error = ""
@@ -549,9 +565,9 @@ class Test_HealthCheck:
                 StepLog = "######## " + scenarioDataList[0] + " Test scenario: " + scenarioDataList[
                     1] + " completed successfully and ended at " + str(EndTime) + " ########"
                 print(StepLog)
-                time.sleep(5)
+                time.sleep(2)
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
-
+                self.driver.close()
             except:
                 print("Inside Exception-----2")
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)

@@ -30,6 +30,7 @@ class ReadConfig:
     def basePath():
         return ReadConfig.path
 
+    #--Total time is seconds to locate an element
     @staticmethod
     def getWaitTimeForEachElement():
         Time = ReadConfig.config.get('common data', 'WaitTimeForEachElement')

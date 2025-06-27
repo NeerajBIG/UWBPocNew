@@ -14,15 +14,31 @@ import email
 
 class Test_ReadEmail:
     basePath = ReadConfig.basePath()
+    path1 = basePath
+    text = path1.split("/")
+    for t in text:
+        if t == ".jenkins":
+            print("Running on Jenkins")
+            path = os.path.dirname(basePath)
+            print("path is " + path)
+            basePath = path
+            JenkinsJobName = os.getenv("JOB_NAME")
+            basePath = basePath + "/" + JenkinsJobName
+        else:
+            pass
+
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
-    sheetName_Config = "Config"
-    Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
-    baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
-    sheetName_Data = "TestUserData"
+
     sheetName_Report = "Report"
+    sheetName_Config = "Config"
+    sheetName_Data = "TestUserData"
     sheetName_Scenarios = "Scenarios"
     sheetName_WoData = "WorkOrderData"
     sheetName_Locators = "Locators"
+
+    Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
+    baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+    ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
 
     testStep = "Launching Application"
     error = ""
@@ -306,7 +322,9 @@ class Test_ReadEmail:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     # raise Exception
 
+                time.sleep(5)
                 # ---------Reading assignment email sent to Underwriter
+                self.testStep = "Reading assignment email sent to Underwriter"
                 imap_url = 'imap.gmail.com'
                 password = ReadConfig.getUnderwriterPassword1()
 
@@ -325,33 +343,45 @@ class Test_ReadEmail:
                         msgs.append(data)
                         my_mail.store(num, "+FLAGS", "\\Deleted")
 
-                    for msg in msgs[::-1]:
-                        for response_part in msg:
-                            if type(response_part) is tuple:
-                                my_msg = email.message_from_bytes(response_part[1])
-                                print("---------------------------------------------")
-                                print("subject:", my_msg['subject'])
-                                print("from:", my_msg['from'])
-                                print("body:")
-                                for part in my_msg.walk():
-                                    print(part.get_content_type())
-                                    if part.get_content_type() == 'text/html':
-                                        print(part.get_payload())
+                    if len(msgs) != 0:
+                        print("Email found: " + str(len(msgs)))
+                        for msg in msgs[::-1]:
+                            for response_part in msg:
+                                if type(response_part) is tuple:
+                                    my_msg = email.message_from_bytes(response_part[1])
+                                    print("---------------------------------------------")
+                                    print("subject:", my_msg['subject'])
+                                    print("from:", my_msg['from'])
+                                    print("body:")
+                                    for part in my_msg.walk():
+                                        print(part.get_content_type())
+                                        if part.get_content_type() == 'text/html':
+                                            print(part.get_payload())
 
+                        screenshotName = "None"
+                        self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    else:
+                        self.error = "No email found for test step - : [ " + self.testStep + " ]"
+                        EndTime = datetime.now()
+                        self.errorMessage = "Test case failed due to " + self.error
+                        XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
+                                                scenarioDataList[1], self.testStep, self.errorMessage, StartTime,
+                                                EndTime)
+                        screenshotName = "None"
+                        self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                 except Exception as e:
+
                     print("Connection failed")
                     raise
-
-                #self.driver.close()
 
                 # ---------Ending the test scenario
                 EndTime = datetime.now()
                 StepLog = "######## " + scenarioDataList[0] + " Test scenario: " + scenarioDataList[
                     1] + " completed successfully and ended at " + str(EndTime) + " ########"
                 print(StepLog)
-                time.sleep(5)
+                time.sleep(2)
                 self.lp.createPDaF(ScenarioName + " - " + scenario_ID, ScenarioTitle)
-
+                self.driver.close()
             except:
                 print("Inside Exception-----2")
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)

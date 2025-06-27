@@ -20,11 +20,33 @@ from testCases.testResultData import testResult
 class ElementLocators:
     Time = ReadConfig.getWaitTimeForEachElement()
     halt = 1
+
     basePath = ReadConfig.basePath()
+    path1 = basePath
+    text = path1.split("/")
+    for t in text:
+        if t == ".jenkins":
+            print("Running on Jenkins")
+            path = os.path.dirname(basePath)
+            print("path is " + path)
+            basePath = path
+            JenkinsJobName = os.getenv("JOB_NAME")
+            basePath = basePath + "/" + JenkinsJobName
+        else:
+            pass
+
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
+
     sheetName_Report = "Report"
     sheetName_Config = "Config"
+    sheetName_Data = "TestUserData"
+    sheetName_Scenarios = "Scenarios"
+    sheetName_WoData = "WorkOrderData"
+    sheetName_Locators = "Locators"
+
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
+    baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
+    ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
 
     def __init__(self, driver):
         self.driver = driver
@@ -111,28 +133,6 @@ class ElementLocators:
         action.key_up(Keys.TAB).perform()
         time.sleep(1)
 
-    def createImage(self, xdata, ydata, data):
-        basePath = ReadConfig.basePath()
-        path = basePath
-        text = path.split("/")
-        for t in text:
-            if t == ".jenkins":
-                print("Running on Jenkins")
-                path = os.path.dirname(basePath)
-                print("path is " + path)
-            else:
-                pass
-        image_path = path + "/Reports/" + data + ".png"
-        plt.figure()
-        plt.plot(xdata, ydata, marker='o')
-        plt.title('Load Time Report for ' + data)
-        plt.xlabel('Iteration')
-        plt.ylabel('Load Time (in seconds)')
-        plt.legend(['Max Time value: ' + str(round(max(ydata), 2)) + ' s'], loc='upper right')
-        plt.grid(True)
-        plt.savefig(image_path)
-        plt.close()
-
     def deleteScreenshot(self):
         basePath = ReadConfig.basePath()
         screenshotFolderPath = basePath + "/Screenshots"
@@ -146,33 +146,20 @@ class ElementLocators:
         screenshotPath = basePath + "/Screenshots"
         self.driver.save_screenshot(screenshotPath + "/"+name + ".png")
 
-    def createPDaF(self, ScenarioName, ScenarioTitle, ):
+    def createPDaF(self, ScenarioName, ScenarioTitle):
         global JenkinsJobName
-        basePath = ReadConfig.basePath()
+        basePath = self.basePath
         dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
         sheetName_Config = "Config"
-        Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
-        baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
-        ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
+        Env = self.Env
+        baseURL = self.baseURL
+        ApplicationName = self.ApplicationName
 
         # --Pdf Report configuration
         ReportHeader = "Testing Report - " + ScenarioName
         ReportIntroduction = ScenarioTitle
         ReportMethodology = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ReportMethodology")
         output_pdf = ApplicationName.replace(" ", "") + "_"+ScenarioName+"-Output_Report"
-
-        path = basePath
-        text = path.split("/")
-        for t in text:
-            if t == ".jenkins":
-                print("Running on Jenkins")
-                path = os.path.dirname(basePath)
-                print("path is " + path)
-                basePath = path
-                JenkinsJobName = os.getenv("JOB_NAME")
-                basePath = basePath +"/"+JenkinsJobName
-            else:
-                pass
         output_file_name = output_pdf
         pdf_path = basePath + "/Reports/" + output_file_name + ".pdf"
 
@@ -256,7 +243,10 @@ class ElementLocators:
                     pdf.set_text_color(255, 0, 0)
                 pdf.multi_cell(0, 5, "Result: " + str(finalDic[dicKeys[i - 1]].split('^-^')[0]), 0,
                            'L')
-                pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png")
+                if str(finalDic[dicKeys[i - 1]].split('^-^')[1]) == "None":
+                    pdf.image(basePath+'/utilities/None.png', h=20, link=basePath+'/utilities/None.png')
+                else:
+                    pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png")
                 pdf.set_text_color(0, 0, 0)
                 pdf.set_font('Arial', '', 7)
                 pdf.multi_cell(0, 4, "Right click on image and select Open link in new tab", 0, 'L')
