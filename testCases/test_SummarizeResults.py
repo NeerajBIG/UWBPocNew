@@ -9,7 +9,7 @@ class Test_SummarizeResult:
     dic = {}
 
     def test_SummarizeResultMeth(self):
-        client = OpenAI(api_key='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')
+        client = OpenAI(api_key='')
 
         pdf_file = open("text.pdf", "rb")
         pdf_reader = PyPDF2.PdfReader(pdf_file)
