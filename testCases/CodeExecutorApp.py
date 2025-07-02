@@ -1,5 +1,6 @@
 import os, sys
 from os.path import dirname, join, abspath
+import requests
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
 import time
@@ -11,8 +12,7 @@ from testCases.configTest import setup
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
-import smtplib
-from email.mime.text import MIMEText
+import base64
 from streamlit.components.v1 import html
 
 
@@ -144,66 +144,30 @@ class aaa:
 
             token = st.text_input("Enter the access token")
             if token == "":
-                st.text("Token field is empty. Please enter the token to run the test cases.")
+                st.text("Token field is empty. Please enter the authorized token to get the test cases list to run.")
             else:
                 try:
                     g = Github(token)
-                    repo = 'NeerajBIG/TriconFSM'
-                    repo = g.get_repo(repo)
-                    path = "testCases/TriForceProp.properties"
+                    repoPath = 'NeerajBIG/ExtraDataBitsinglass'
+                    repo = g.get_repo(repoPath)
 
-                    #---------QA environment properties----------------
-                    data = "QAUsername=Pushp.PO"
-                    data = data + '\n' + "QAPassword=testrules@987"
-                    data = data + '\n' + "QAUrl=tahtest.appiancloud.com"
+                    path = "UWB_Reports"
 
-                    # ---------Staging environment properties----------------
-                    data = data + '\n' + "StagingUsername=Pushp.PO1"
-                    data = data + '\n' + "StagingPassword=testrules@9871"
-                    data = data + '\n' + "StagingUrl=tahdev.appiancloud.com"
+                    # repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
+                    #                  sha=repo.get_contents("testCases/TriForceProp.properties").sha)
 
-                    # data = data + '\n' + "threadcount=" + str(Count)
-                    # data = data + '\n' + "loopcount=" + str(LoopCount)
-                    # data = data + '\n' + "Project=" + ProjectName
-                    # data = data + '\n' + "Environment=" + option
-                    # data = data + '\n' + "Application=" + ProjectName + "Appian"
+                    # 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
+                    folderContent = repo.get_contents(path)
+                    st.text("Total report files count - "+str(len(folderContent)))
 
-                    repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
-                                     sha=repo.get_contents("testCases/TriForceProp.properties").sha)
-                    time.sleep(2)
-
-                    # scenario_ID = SelectedModule
-                    # url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=' + scenario_ID + '&token=bitsinglasstestjobs'
-                    # if 'button' not in st.session_state:
-                    #     st.session_state.button = False
-                    #
-                    # def open_page(url):
-                    #     st.session_state.button = not st.session_state.button
-                    #     open_script = ("""<script type="text/javascript">window.open('%s', '').focus();
-                    #     </script>
-                    #     """
-                    #                    % (url))
-                    #     html(open_script)
-                    #
-                    # st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    # if st.session_state.button:
-                    #     time.sleep(2)
-                    #     st.session_state.button = False
-                    #     st.rerun()
-                    # else:
-                    #     pass
+                    for c in folderContent:
+                        if ".pdf" in c.name :
+                            st.text("Click on the buttons below to download it")
+                            st.link_button(label=c.name, url=c.download_url)
 
                 except Exception as e:
-                    st.error("Token is invalid. Please enter a valid token to run the test cases.")
-                    #st.text(str(e))
-            # t = "None"
-            # if st.checkbox('List Buttons for all Graphs'):
-            #     for t in Modules:
-            #         #st.text(str(t))
-            #         pass
-            #     if t == Modules[0]:
-            #         st.link_button(Modules[0],
-            #                    "https://4162-13-54-100-122.ngrok-free.app/d/qzGpZBdVz/jmeter-performance-testing-dashboard?orgId=1&from=1728154957480&to=1728156757480&var-bucket=Tricon&var-application=TriconAppian&var-measurement=Tricon-QA&var-Environment=QA&var-transaction=Navigating+to+all+Sections", )
+                    st.error("Token is invalid. Please enter a valid token to be authorized to run the test cases.")
+                    st.text(str(e))
         else:
             agree = st.checkbox(
                 "Any concern? such as 1) Excluding yourself from the list of recipients or 2) Want to be a recipient for the test results? 3) Other Concern. Send a request below")
@@ -232,7 +196,6 @@ class aaa:
                     if st.button("Send Request"):
                         try:
                             driver = setup
-                            #driver.get(baseURL)
                             lp = ElementLocators(driver)
                             email_sender = ReadConfig.getReportEmailSender()
                             email_password = ReadConfig.getReportPasswordSender()
@@ -241,20 +204,6 @@ class aaa:
                             ReportFolderName = "None"
                             lp.shareReports(email_sender, email_password, email_receiver, subject, body,
                                                  ReportFolderName)
-                            # msg = MIMEText(body)
-                            # msg['From'] = email_sender
-                            # msg['To'] = email_receiver
-                            # msg['Subject'] = ProjectName + ": Request for " + subject
-                            # email_password = 'gwgc ioef ymbx yybo'
-                            #
-                            # server = smtplib.SMTP('smtp.gmail.com', 587)
-                            # server.starttls()
-                            # server.login(email_sender, email_password)
-                            # server.sendmail(email_sender, email_receiver, msg.as_string())
-                            # server.quit()
-                            #
-                            # st.success('Email sent successfully! 🚀')
-
                         except Exception as e:
                             st.error(f"Email not sent, error occurred. Please send an email externally : {e}")
     if st.button("Reload Page", type="primary"):
