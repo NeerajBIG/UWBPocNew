@@ -11,3 +11,4 @@ matplotlib~=3.9.2
 pyjavaproperties~=0.7
 tzlocal~=5.3.1
 pytest-html~=4.1.1
+streamlit~=1.46.1
