@@ -156,7 +156,6 @@ class aaa:
                     # repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
                     #                  sha=repo.get_contents("testCases/TriForceProp.properties").sha)
 
-                    # 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
                     folderContent = repo.get_contents(path)
                     st.text("Total report files count - "+str(len(folderContent)))
 
