@@ -79,11 +79,13 @@ class aaa:
                             )
 
                     scenario_ID = "SC_001"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    count = int(scenarioDataList[3])
-                    st.text(scenario_ID + ": " + ScenarioTitle + ". Current count is " + str(count))
+                    jenkinsBaseUrl = 'http://localhost:8080/job/'
+                    url = 'UWB_HealthCheck/'
+                    #url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
+                    # scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
+                    # ScenarioTitle = scenarioDataList[1]
+                    # count = int(scenarioDataList[3])
+                    # st.text(scenario_ID + ": " + ScenarioTitle + ". Current count is " + str(count))
                     if 'button' not in st.session_state:
                         st.session_state.button = False
 
