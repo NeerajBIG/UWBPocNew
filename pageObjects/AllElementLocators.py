@@ -142,6 +142,14 @@ class ElementLocators:
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
+    def deleteReports(self):
+        basePath = ReadConfig.basePath()
+        reportsFolderPath = basePath + "/Reports"
+        for filename in os.listdir(reportsFolderPath):
+            file_path = os.path.join(reportsFolderPath, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
     def takeScreenshot(self, name):
         basePath = ReadConfig.basePath()
         screenshotPath = basePath + "/Screenshots"
@@ -187,12 +195,13 @@ class ElementLocators:
         Env = self.Env
         baseURL = self.baseURL
         ApplicationName = self.ApplicationName
+        StartTime = datetime.now()
 
         # --Pdf Report configuration
         ReportHeader = "Testing Report - " + ScenarioName
         ReportIntroduction = ScenarioTitle
         ReportMethodology = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ReportMethodology")
-        output_pdf = ApplicationName.replace(" ", "") + "_"+ScenarioName+"-Output_Report"
+        output_pdf = ApplicationName.replace(" ", "") + "_"+ ScenarioName+"_"+str(StartTime.strftime("%m-%d-%Y_%H-%M-%S"))
         output_file_name = output_pdf
         pdf_path = basePath + "/Reports/" + output_file_name + ".pdf"
 
@@ -201,8 +210,6 @@ class ElementLocators:
         pdf.set_auto_page_break(auto=True, margin=15)
         RightSectionSize = 7
         LeftSectionSize = 7
-
-        StartTime = datetime.now()
 
         # network = speedtest.Speedtest(secure=True)
         # down = network.download() / 1000000
@@ -303,4 +310,34 @@ class ElementLocators:
                       link='https://www.jenkins.io/')
 
         pdf.output(pdf_path)
-        #print(f"PDF created successfully")
+        print(f"PDF created successfully")
+
+        try:
+            with open(basePath+"/utilities/GitToken.txt", "r") as file:
+                content = file.read()
+                print(content)
+        except FileNotFoundError:
+            print("The file 'your_file.txt' was not found.")
+
+        token = content
+        from github import Github
+        g = Github(token)
+        repoPath = 'NeerajBIG/ExtraDataBitsinglass'
+        repo = g.get_repo(repoPath)
+
+        file_path = pdf_path  # Desired path in the repository
+        with open(file_path, "rb") as pdf_file:
+            pdf_content = pdf_file.read()
+
+        file_path_in_repo = "UWB_Reports/"+output_pdf+".pdf" # Desired path within the repo
+        commit_message = "Added new report file "+output_pdf+".pdf"
+        try:
+            # Check if the file already exists
+            contents = repo.get_contents(file_path_in_repo)
+            # If it exists, update it
+            repo.update_file(contents.path, commit_message, pdf_content, contents.sha)
+            print(f"File '{file_path_in_repo}' updated successfully.")
+        except Exception:
+            # If it doesn't exist, create it
+            repo.create_file(file_path_in_repo, commit_message, pdf_content)
+            print(f"File '{file_path_in_repo}' created successfully.")

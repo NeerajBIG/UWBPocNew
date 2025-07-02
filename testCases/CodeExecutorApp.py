@@ -130,15 +130,6 @@ class aaa:
 
         elif st.checkbox('Get previous test results'):
 
-            # Modules = ["FullTestReadOnly"]
-            # SelectedModule = st.selectbox("Select Module", Modules)
-            #
-            # Count = st.slider("Select Virtual Users count", 1, 1000)
-            # st.text("Virtual Users count is: " + str(Count))
-            #
-            # LoopCount = st.slider("Select Loop Count", 1, 100)
-            # st.text("Loop count is: " + str(LoopCount))
-
             option = st.selectbox('Please choose the application environment', ('QA', 'Staging', 'Preprod', 'Prod'))
             st.write('You selected:', option)
 
@@ -159,10 +150,10 @@ class aaa:
 
                     folderContent = repo.get_contents(path)
                     st.text("Total report files count - "+str(len(folderContent)))
+                    st.text("Click on the buttons below to download it")
 
                     for c in folderContent:
                         if ".pdf" in c.name :
-                            st.text("Click on the buttons below to download it")
                             st.link_button(label=c.name, url=c.download_url)
 
                 except Exception as e:

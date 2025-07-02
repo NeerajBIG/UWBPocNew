@@ -61,6 +61,7 @@ class Test_HealthCheck:
 
         # ---------Deleting all screenshots
         self.lp.deleteScreenshot()
+        self.lp.deleteReports()
 
         if Enable is True:
             try:
