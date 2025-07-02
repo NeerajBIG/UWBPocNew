@@ -79,8 +79,9 @@ class aaa:
                             )
 
                     scenario_ID = "SC_001"
-                    jenkinsBaseUrl = 'http://localhost:8080/job/'
-                    url = 'UWB_HealthCheck/'
+                    jenkinsBaseUrl = 'http://localhost:8080/buildByToken/build?job='
+                    job = 'UWB_HealthCheck/'
+                    url = jenkinsBaseUrl+job+'&token=bitsinglasstestjobs'
                     #url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
                     # scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
                     # ScenarioTitle = scenarioDataList[1]
