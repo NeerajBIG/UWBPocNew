@@ -154,6 +154,7 @@ class Test_HealthCheck:
                     self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
                     #raise Exception
 
+                self.driver.close()
                 time.sleep(1)
                 # ---------Clicking Cases link text
                 self.testStep = "Clicking Cases link text"
