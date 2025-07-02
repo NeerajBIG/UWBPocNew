@@ -6,10 +6,8 @@ import time
 import streamlit as st
 import sys
 from os.path import dirname, join, abspath
-
 from pageObjects.AllElementLocators import ElementLocators
 from testCases.configTest import setup
-
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
@@ -65,12 +63,12 @@ class aaa:
 
     #------------------------------------------
     if st.checkbox('Start Over'):
-        if st.checkbox('Run Tricon PEGA Regression Test'):
-            st.text("Current Environment to run the test cases is: " + Env)
+        if st.checkbox('Run '+ProjectName+' Regression Test'):
+            st.text("Current Environment selected to run the test cases is: " + Env)
             st.text("Environment URL: " + baseURL)
             #st.text("Email Recipients list: " + EmailRecipients)
 
-            person = st.text_input('Validate your email address before running scripts.')
+            person = st.text_input('To run the test script, please authorize yourself by validate your email address')
             text = EmailRecipients.split(",")
             for index, t in enumerate(text):
                 if t.strip() == person.strip():
@@ -106,388 +104,11 @@ class aaa:
                     else:
                         pass
 
-                    scenario_ID = "SC_002"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_003"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-                        pass
-
-                    scenario_ID = "SC_004"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_005"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_006"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_007"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_008"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_009"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_010"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_011"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                    <script type="text/javascript">
-                                        window.open('%s', '_blank').focus();
-                                    </script>
-                                """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_012"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                        <script type="text/javascript">
-                                            window.open('%s', '_blank').focus();
-                                        </script>
-                                    """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_013"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                        <script type="text/javascript">
-                                            window.open('%s', '_blank').focus();
-                                        </script>
-                                    """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_014"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                        <script type="text/javascript">
-                                            window.open('%s', '_blank').focus();
-                                        </script>
-                                    """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_015"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                        <script type="text/javascript">
-                                            window.open('%s', '_blank').focus();
-                                        </script>
-                                    """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-                    scenario_ID = "SC_016"
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    ScenarioTitle = scenarioDataList[1]
-                    st.text(scenario_ID + ": " + ScenarioTitle)
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                        <script type="text/javascript">
-                                            window.open('%s', '_blank').focus();
-                                        </script>
-                                    """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
-
                 else:
                     if index == len(text) - 1:
                         if person != "":
                             st.warning(
-                                'Sorry, you are not in the recipient list. Please send request by clicking on the above checkbox to be included in the recipient list. We will get back to you shortly when your email is added to the list.')
+                                'Authorization failed. Please send a request and share your email address to be authorized. We will get back to you shortly once your email is added to the list.')
                         else:
                             st.warning('Please enter your email address to validate.')
 
@@ -503,16 +124,16 @@ class aaa:
                     """
                     )
 
-        elif st.checkbox('Run Tricon Appian Load Test'):
+        elif st.checkbox('Get previous test results'):
 
-            Modules = ["FullTestReadOnly"]
-            SelectedModule = st.selectbox("Select Module", Modules)
-
-            Count = st.slider("Select Virtual Users count", 1, 1000)
-            st.text("Virtual Users count is: " + str(Count))
-
-            LoopCount = st.slider("Select Loop Count", 1, 100)
-            st.text("Loop count is: " + str(LoopCount))
+            # Modules = ["FullTestReadOnly"]
+            # SelectedModule = st.selectbox("Select Module", Modules)
+            #
+            # Count = st.slider("Select Virtual Users count", 1, 1000)
+            # st.text("Virtual Users count is: " + str(Count))
+            #
+            # LoopCount = st.slider("Select Loop Count", 1, 100)
+            # st.text("Loop count is: " + str(LoopCount))
 
             option = st.selectbox('Please choose the application environment', ('QA', 'Staging', 'Preprod', 'Prod'))
             st.write('You selected:', option)
@@ -537,48 +158,48 @@ class aaa:
                     data = data + '\n' + "StagingPassword=testrules@9871"
                     data = data + '\n' + "StagingUrl=tahdev.appiancloud.com"
 
-                    data = data + '\n' + "threadcount=" + str(Count)
-                    data = data + '\n' + "loopcount=" + str(LoopCount)
-                    data = data + '\n' + "Project=" + ProjectName
-                    data = data + '\n' + "Environment=" + option
-                    data = data + '\n' + "Application=" + ProjectName + "Appian"
+                    # data = data + '\n' + "threadcount=" + str(Count)
+                    # data = data + '\n' + "loopcount=" + str(LoopCount)
+                    # data = data + '\n' + "Project=" + ProjectName
+                    # data = data + '\n' + "Environment=" + option
+                    # data = data + '\n' + "Application=" + ProjectName + "Appian"
 
                     repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
                                      sha=repo.get_contents("testCases/TriForceProp.properties").sha)
                     time.sleep(2)
 
-                    scenario_ID = SelectedModule
-                    url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=' + scenario_ID + '&token=bitsinglasstestjobs'
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = ("""<script type="text/javascript">window.open('%s', '').focus();
-                        </script>
-                        """
-                                       % (url))
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
+                    # scenario_ID = SelectedModule
+                    # url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=' + scenario_ID + '&token=bitsinglasstestjobs'
+                    # if 'button' not in st.session_state:
+                    #     st.session_state.button = False
+                    #
+                    # def open_page(url):
+                    #     st.session_state.button = not st.session_state.button
+                    #     open_script = ("""<script type="text/javascript">window.open('%s', '').focus();
+                    #     </script>
+                    #     """
+                    #                    % (url))
+                    #     html(open_script)
+                    #
+                    # st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
+                    # if st.session_state.button:
+                    #     time.sleep(2)
+                    #     st.session_state.button = False
+                    #     st.rerun()
+                    # else:
+                    #     pass
 
                 except Exception as e:
                     st.error("Token is invalid. Please enter a valid token to run the test cases.")
                     #st.text(str(e))
-            t = "None"
-            if st.checkbox('List Buttons for all Graphs'):
-                for t in Modules:
-                    #st.text(str(t))
-                    pass
-                if t == Modules[0]:
-                    st.link_button(Modules[0],
-                               "https://4162-13-54-100-122.ngrok-free.app/d/qzGpZBdVz/jmeter-performance-testing-dashboard?orgId=1&from=1728154957480&to=1728156757480&var-bucket=Tricon&var-application=TriconAppian&var-measurement=Tricon-QA&var-Environment=QA&var-transaction=Navigating+to+all+Sections", )
+            # t = "None"
+            # if st.checkbox('List Buttons for all Graphs'):
+            #     for t in Modules:
+            #         #st.text(str(t))
+            #         pass
+            #     if t == Modules[0]:
+            #         st.link_button(Modules[0],
+            #                    "https://4162-13-54-100-122.ngrok-free.app/d/qzGpZBdVz/jmeter-performance-testing-dashboard?orgId=1&from=1728154957480&to=1728156757480&var-bucket=Tricon&var-application=TriconAppian&var-measurement=Tricon-QA&var-Environment=QA&var-transaction=Navigating+to+all+Sections", )
         else:
             agree = st.checkbox(
                 "Any concern? such as 1) Excluding yourself from the list of recipients or 2) Want to be a recipient for the test results? 3) Other Concern. Send a request below")
