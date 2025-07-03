@@ -316,13 +316,13 @@ class ElementLocators:
         print(f"PDF created successfully")
 
         try:
+            print(self.basePath)
             print(self.basePathGit)
-
             with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
                 print(content)
         except FileNotFoundError:
-            print("The file 'your_file.txt' was not found.")
+            print("Exception occurred: GitToken file was not found.")
 
         token = content
         from github import Github
