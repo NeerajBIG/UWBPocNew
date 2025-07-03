@@ -34,7 +34,9 @@ class ElementLocators:
             basePath = path
             JenkinsJobName = os.getenv("JOB_NAME")
             basePath = basePath + "/" + JenkinsJobName
-            basePathGit = basePath.split('/').pop() + "/ReportsGitTok"
+            basePathGit = basePath.rsplit('/', 1) [0]
+            print("basePathGit is " + basePathGit)
+            basePathGit = basePathGit + "/ReportsGitTok"
             print("basePathGit is " + basePathGit)
         else:
             pass
