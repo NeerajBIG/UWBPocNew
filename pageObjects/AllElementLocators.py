@@ -37,8 +37,8 @@ class ElementLocators:
             basePathGit = basePath.rsplit('/', 1) [0]
             print("basePathGit is " + basePathGit)
             basePathGit = basePathGit + "/ReportsGitTok"
-            print("basePathGit is " + basePathGit)
         else:
+            basePathGit = basePathGit + "/Configurations"
             pass
 
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
@@ -318,8 +318,6 @@ class ElementLocators:
         print(f"PDF created successfully")
 
         try:
-            print(self.basePath)
-            print(self.basePathGit)
             with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
                 print(content)
