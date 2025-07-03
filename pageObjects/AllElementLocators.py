@@ -38,6 +38,7 @@ class ElementLocators:
             print("basePathGit is " + basePathGit)
             basePathGit = basePathGit + "/ReportsGitTok"
         else:
+            basePathGit = ReadConfig.basePath()
             basePathGit = basePathGit + "/Configurations"
             pass
 
@@ -318,6 +319,7 @@ class ElementLocators:
         print(f"PDF created successfully")
 
         try:
+            print(self.basePathGit)
             with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
                 print(content)
