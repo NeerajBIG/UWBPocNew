@@ -1,9 +1,7 @@
 import os, sys
 from os.path import dirname, join, abspath
-import requests
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
-import time
 import streamlit as st
 import sys
 from os.path import dirname, join, abspath
@@ -12,8 +10,6 @@ from testCases.configTest import setup
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
-import base64
-from streamlit.components.v1 import html
 
 
 class aaa:
@@ -45,15 +41,11 @@ class aaa:
     ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
     ProjectName = ApplicationName
     EmailRecipients = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "EmailReport_To")
-    # text = basePath.split("/")
-    # for t in text:
-    #     if t == "mount":
-    #         path = basePath.rsplit('/', 1)[0]
-    #         basePath = path
-    #     else:
-    #         pass
 
-    st.set_page_config(layout="wide")
+    st.set_page_config(
+        page_title=ApplicationName,
+        layout="centered"
+    )
     st.html("""
         <a href="https://bitsinglass.com/">
         <img src="https://raw.githubusercontent.com/NeerajBIG/ExtraDataBitsinglass/main/BitsInGlassLogo.png" width="150" height="50" ALIGN="CENTER">
@@ -70,44 +62,13 @@ class aaa:
 
             person = st.text_input('To run the test script, please authorize yourself by validate your email address')
             text = EmailRecipients.split(",")
+            authorizationChecker = 0
             for index, t in enumerate(text):
                 if t.strip() == person.strip():
                     st.write('Cheers! Your email address verified successfully.')
-                    st.html("""
-                            <H4>Please select an option below to run the test case</H4>
-                            """
-                            )
-
-                    scenario_ID = "SC_001"
-                    jenkinsBaseUrl = 'http://localhost:8080/buildByToken/build?job='
-                    job = 'UWB_HealthCheck'
-                    url = jenkinsBaseUrl+job+'&token=bitsinglasstestjobs'
-                    st.write(url)
-                    #url = 'https://7965-13-54-100-122.ngrok-free.app/buildByToken/build?job=Test_' + scenario_ID + '&token=bitsinglasstestjobs'
-                    # scenarioDataList = XLUtils.readDataScenarios(dataSheetPath, sheetName_Scenarios, scenario_ID)
-                    # ScenarioTitle = scenarioDataList[1]
-                    # count = int(scenarioDataList[3])
-                    # st.text(scenario_ID + ": " + ScenarioTitle + ". Current count is " + str(count))
-                    if 'button' not in st.session_state:
-                        st.session_state.button = False
-
-                    def open_page(url):
-                        st.session_state.button = not st.session_state.button
-                        open_script = """
-                                <script type="text/javascript">
-                                    window.open('%s', '_blank').focus();
-                                </script>
-                            """ % (url)
-                        html(open_script)
-
-                    st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
-                    if st.session_state.button:
-                        time.sleep(2)
-                        st.session_state.button = False
-                        st.rerun()
-                    else:
-                        pass
-
+                    st.write('Please select an option below to run the test case.')
+                    authorizationChecker = 1
+                    break
                 else:
                     if index == len(text) - 1:
                         if person != "":
@@ -116,17 +77,66 @@ class aaa:
                         else:
                             st.warning('Please enter your email address to validate.')
 
-            st.html("""
-                    <Br>You will receive an email with test results after the code execution is complete.</Br>
-                    <Br>For any questions please contact at <a href="mailto:neeraj.kumar@bitsinglass.com"></Br>
-                    neeraj.kumar@bitsinglass.com</a>.
+            if authorizationChecker == 1:
+                scenario_ID = "SC_001"
+                jenkinsBaseUrl = 'http://localhost:8080/buildByToken/build?job='
+                job = 'UWB_HealthCheck'
+                url = jenkinsBaseUrl + job + '&token=bitsinglasstestjobs'
 
-                    <B></B>
-                    <B></B>
-                    <HR>
-                    </BODY>
-                    """
-                    )
+                AllScenarios = XLUtils.getAllScenarios(dataSheetPath, sheetName_Scenarios)
+                ScenarioDic = {}
+                ScenarioDic1 = {}
+                for index1, t1 in enumerate(AllScenarios.keys()):
+                    if "SC" in t1:
+                        ButtonName = AllScenarios[t1]
+                        ButtonDescription = AllScenarios[ButtonName]
+
+                        url = jenkinsBaseUrl + ApplicationName+"_"+t1 + '&token=bitsinglasstestjobs'
+
+                        ScenarioDic[ButtonName] = ButtonDescription
+                        ScenarioDic1[ButtonDescription] = url
+
+                col = st.columns(len(ScenarioDic.keys()))
+                for index2, t2 in enumerate(ScenarioDic.keys()):
+                    urlKey = ScenarioDic[t2]
+                    url = ScenarioDic1[urlKey]
+
+                    with st.container(border=True):
+                        st.link_button(t2,url)
+                        st.write(ScenarioDic[t2])
+
+                # if 'button' not in st.session_state:
+                #     st.session_state.button = False
+                #
+                # def open_page(url):
+                #     st.session_state.button = not st.session_state.button
+                #     open_script = """
+                #                                 <script type="text/javascript">
+                #                                     window.open('%s', '_blank').focus();
+                #                                 </script>
+                #                             """ % (url)
+                #     html(open_script)
+                #
+                # st.button('Run Test Case: ' + scenario_ID, on_click=open_page, args=(url,))
+                # if st.session_state.button:
+                #     time.sleep(2)
+                #     st.session_state.button = False
+                #     st.rerun()
+                # else:
+                #     pass
+
+                st.html("""
+                        <Br>You will receive an email with test results after the code execution is complete.</Br>
+                        <Br>For any questions please contact at <a href="mailto:neeraj.kumar@bitsinglass.com"></Br>
+                        neeraj.kumar@bitsinglass.com</a>.
+    
+                        <B></B>
+                        <B></B>
+                        <HR>
+                        </BODY>
+                        """
+                        )
+
 
         elif st.checkbox('Get previous test results'):
 
@@ -143,11 +153,8 @@ class aaa:
                     repo = g.get_repo(repoPath)
 
                     path = "UWB_Reports"
-
                     # repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
                     #                  sha=repo.get_contents("testCases/TriForceProp.properties").sha)
-
-
                     folderContent = repo.get_contents(path)
                     st.text("Total report files count - "+str(len(folderContent)))
                     st.text("Click on the buttons below to download it")

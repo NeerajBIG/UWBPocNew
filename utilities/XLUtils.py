@@ -31,7 +31,6 @@ def readDataTestUserDataConfirmation(file, sheetName, ToFind):
     sheet = workbook[sheetName]
     rows = sheet.max_row
     for r in range(1, rows + 1):
-        # print("r is " + str(r))
         for c in range(1, 2):
             cellData = sheet.cell(row=r, column=c).value
             if cellData == ToFind:
@@ -52,8 +51,23 @@ def readXLData(file, sheetName):
             else:
                 dataValue = sheet.cell(row=r, column=c1+1).value
                 dataList[data]=dataValue
-                #print(dataList)
     return dataList
+
+def getAllScenarios(file, sheetName):
+    workbook = openpyxl.load_workbook(file)
+    sheet = workbook[sheetName]
+    rows = sheet.max_row
+    columns = sheet.max_column
+    dataList1 = {}
+    for r in range(2, rows + 1):
+        for c1 in range(1, 3):
+            data = sheet.cell(row=r, column=c1).value
+            if data is None or data == "None":
+                pass
+            else:
+                dataValue1 = sheet.cell(row=r, column=c1+1).value
+                dataList1[data]=dataValue1
+    return dataList1
 
 def readDataScenarios(file, sheetName, ToFind):
     workbook = openpyxl.load_workbook(file)

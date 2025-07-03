@@ -16,6 +16,7 @@ from email.message import EmailMessage
 import smtplib
 from fpdf import FPDF
 from testCases.testResultData import testResult
+from github import Github
 
 
 class ElementLocators:
@@ -60,6 +61,9 @@ class ElementLocators:
     Env = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_ToRun")
     baseURL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "Env_" + Env + "_URL")
     ApplicationName = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "ProjectName")
+
+    GitHubRepoPath = 'NeerajBIG/ExtraDataBitsinglass'
+    GitHubRepoReportsFolder = 'UWB_Reports'
 
     def __init__(self, driver):
         self.driver = driver
@@ -325,32 +329,29 @@ class ElementLocators:
         print(f"PDF created successfully")
 
         try:
-            print(self.basePathGit)
             with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
-                print(content)
+                token = content
+
+                g = Github(token)
+                repoPath = self.GitHubRepoPath
+                repo = g.get_repo(repoPath)
+
+                file_path = pdf_path  # Desired path in the repository
+                with open(file_path, "rb") as pdf_file:
+                    pdf_content = pdf_file.read()
+
+                file_path_in_repo = self.GitHubRepoReportsFolder + "/" + output_pdf + ".pdf"
+                commit_message = "Added new report file " + output_pdf + ".pdf"
+                try:
+                    # Check if the file already exists
+                    contents = repo.get_contents(file_path_in_repo)
+                    # If it exists, update it
+                    repo.update_file(contents.path, commit_message, pdf_content, contents.sha)
+                    print(f"File '{file_path_in_repo}' updated successfully.")
+                except Exception:
+                    # If it doesn't exist, create it
+                    repo.create_file(file_path_in_repo, commit_message, pdf_content)
+                    print(f"File '{file_path_in_repo}' created successfully.")
         except FileNotFoundError:
             print("Exception occurred: GitToken file was not found.")
-
-        token = content
-        from github import Github
-        g = Github(token)
-        repoPath = 'NeerajBIG/ExtraDataBitsinglass'
-        repo = g.get_repo(repoPath)
-
-        file_path = pdf_path  # Desired path in the repository
-        with open(file_path, "rb") as pdf_file:
-            pdf_content = pdf_file.read()
-
-        file_path_in_repo = "UWB_Reports/"+output_pdf+".pdf" # Desired path within the repo
-        commit_message = "Added new report file "+output_pdf+".pdf"
-        try:
-            # Check if the file already exists
-            contents = repo.get_contents(file_path_in_repo)
-            # If it exists, update it
-            repo.update_file(contents.path, commit_message, pdf_content, contents.sha)
-            print(f"File '{file_path_in_repo}' updated successfully.")
-        except Exception:
-            # If it doesn't exist, create it
-            repo.create_file(file_path_in_repo, commit_message, pdf_content)
-            print(f"File '{file_path_in_repo}' created successfully.")
