@@ -317,6 +317,7 @@ class ElementLocators:
 
         try:
             print(self.basePathGit)
+
             with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
                 print(content)
