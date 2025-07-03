@@ -23,6 +23,7 @@ class ElementLocators:
     halt = 1
 
     basePath = ReadConfig.basePath()
+    basePathGit = ReadConfig.basePath()
     path1 = basePath
     text = path1.split("/")
     for t in text:
@@ -33,6 +34,8 @@ class ElementLocators:
             basePath = path
             JenkinsJobName = os.getenv("JOB_NAME")
             basePath = basePath + "/" + JenkinsJobName
+            basePathGit = basePath.split('/').pop() + "/ReportsGitTok"
+            print("basePathGit is " + basePathGit)
         else:
             pass
 
@@ -313,7 +316,8 @@ class ElementLocators:
         print(f"PDF created successfully")
 
         try:
-            with open(basePath+"/utilities/GitToken.txt", "r") as file:
+            print(self.basePathGit)
+            with open(self.basePathGit+"/GitToken.txt", "r") as file:
                 content = file.read()
                 print(content)
         except FileNotFoundError:
