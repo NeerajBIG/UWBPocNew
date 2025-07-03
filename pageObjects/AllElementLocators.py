@@ -26,6 +26,7 @@ class ElementLocators:
     basePathGit = ReadConfig.basePath()
     path1 = basePath
     text = path1.split("/")
+    jenkinsCheck = 0
     for t in text:
         if t == ".jenkins":
             print("Running on Jenkins")
@@ -34,13 +35,18 @@ class ElementLocators:
             basePath = path
             JenkinsJobName = os.getenv("JOB_NAME")
             basePath = basePath + "/" + JenkinsJobName
+
             basePathGit = basePath.rsplit('/', 1) [0]
             print("basePathGit is " + basePathGit)
             basePathGit = basePathGit + "/ReportsGitTok"
+
+            jenkinsCheck = 1
         else:
-            basePathGit = ReadConfig.basePath()
-            basePathGit = basePathGit + "/Configurations"
             pass
+
+    if jenkinsCheck == 0:
+        basePathGit = ReadConfig.basePath()
+        basePathGit = basePathGit + "/Configurations"
 
     dataSheetPath = basePath + "/TestData/DataAndReport.xlsx"
 
