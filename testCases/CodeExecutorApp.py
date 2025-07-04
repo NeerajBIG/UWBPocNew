@@ -10,6 +10,7 @@ from testCases.configTest import setup
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from utilities import XLUtils
 from utilities.readProperties import ReadConfig
+import datetime
 
 
 class aaa:
@@ -156,12 +157,56 @@ class aaa:
                     # repo.update_file(path=path, message="Updated JMeter Property file", content=data, branch="master",
                     #                  sha=repo.get_contents("testCases/TriForceProp.properties").sha)
                     folderContent = repo.get_contents(path)
+                    st.text("")
+                    st.text("")
+                    st.text("")
                     st.text("Total report files count - "+str(len(folderContent)))
-                    st.text("Click on the buttons below to download it")
 
+                    ReportDates = []
+                    ReportNames = []
+                    ReportLinksDic = {}
                     for c in folderContent:
                         if ".pdf" in c.name :
-                            st.link_button(label=c.name, url=c.download_url)
+                            with st.container(border=True):
+                                ReportDate = c.name.split("_")
+                                ReportDates.append(ReportDate[3])
+                                ReportNames.append(c.name)
+                                ReportLinksDic[c.name] = c.download_url
+
+                    import pandas as pd
+                    startD = st.date_input("Choose Report Range Start Date", datetime.date(2019, 7, 6))
+                    endD = st.date_input("Choose Report Range End Date", datetime.date(2019, 7, 6))
+
+                    start_date = str(startD)
+                    end_date = str(endD)
+
+                    ReportAllData = {'Date': ReportDates, 'Value': ReportNames}
+                    df = pd.DataFrame(ReportAllData)
+                    df['Date'] = pd.to_datetime(df['Date'])
+                    filtered_df_range = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
+
+                    st.text("")
+                    st.text("")
+                    st.text("")
+                    st.text("Total filtered reports count - " + str(len(filtered_df_range)))
+                    ExceptionCheck = 0
+                    try:
+                        print(str(filtered_df_range['Value'][0]))
+                    except:
+                        ExceptionCheck = 1
+
+                    if ExceptionCheck == 1:
+                        if pd.to_datetime(start_date) > pd.to_datetime(end_date):
+                            st.error("Start Date cannot be greater than end date")
+                        else:
+                            if len(filtered_df_range) == 0:
+                                st.error("Sorry, no result found")
+                            else:
+                                for d in range(len(filtered_df_range)):
+                                    st.link_button(label=str(filtered_df_range['Value'][len(folderContent)+(d-len(filtered_df_range))]), url="download_url")
+                    else:
+                        for d in range(len(filtered_df_range)):
+                            st.link_button(label=str(filtered_df_range['Value'][d]), url=ReportLinksDic[str(filtered_df_range['Value'][d])])
 
                 except Exception as e:
                     st.error("Token is invalid. Please enter a valid token to be authorized to run the test cases.")
