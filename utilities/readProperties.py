@@ -80,3 +80,13 @@ class ReadConfig:
     def getReportPasswordSender():
         ReportPasswordSender = ReadConfig.config.get('common data', 'ReportPasswordSender')
         return ReportPasswordSender
+
+    @staticmethod
+    def getGitToken():
+        GitToken = ReadConfig.config.get('common data', 'GitToken')
+        return GitToken
+
+    @staticmethod
+    def getOpenAIToken():
+        OpenAIToken = ReadConfig.config.get('common data', 'OpenAPIToken')
+        return OpenAIToken
