@@ -17,6 +17,7 @@ import base64
 from LLMfunctions import *
 import urllib.parse
 
+
 class aaa:
     try:
         basePath = ReadConfig.basePath()
