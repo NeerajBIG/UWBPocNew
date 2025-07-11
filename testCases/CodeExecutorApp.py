@@ -1,6 +1,7 @@
 import os, sys
+import time
 from os.path import dirname, join, abspath
-import pandas as pd
+import wget
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
 import streamlit as st
@@ -14,6 +15,7 @@ from utilities.readProperties import ReadConfig
 import datetime
 import base64
 from LLMfunctions import *
+import urllib.parse
 
 class aaa:
     try:
@@ -83,7 +85,7 @@ class aaa:
         st.header(ProjectName + " Automation code executor")
 
         #------------------------------------------
-        if st.checkbox('Start Over'):
+        if st.toggle('Start Over'):
             if st.checkbox('Run '+ProjectName+' Regression Test'):
                 st.text("Current Environment selected to run the test cases is: " + Env)
                 st.text("Environment URL: " + baseURL)
@@ -212,56 +214,140 @@ class aaa:
                                 else:
                                     for d in range(len(filtered_df_range)):
                                         with  st.container(border=True):
-                                            st.link_button(label=str(filtered_df_range['Value'][len(folderContent)+(d-len(filtered_df_range))]), url=ReportLinksDic[str(filtered_df_range['Value'][len(folderContent)+(d-len(filtered_df_range))])])
+                                            file_URL = ReportLinksDic[str(filtered_df_range['Value'][len(folderContent)+(d-len(filtered_df_range))])]
+                                            file_Name = str(filtered_df_range['Value'][len(folderContent)+(d-len(filtered_df_range))])
+
+                                            text_for_button = 'Click on the button to download the report'
+                                            col1, col2 = st.columns([1, 1])
+                                            with col1:
+                                                st.link_button(label=file_Name, url=file_URL)
+                                            with col2:
+                                                st.text(text_for_button)
+                                            if st.checkbox('Display Test Report', key=d):
+                                                try:
+                                                    st.set_page_config(layout="wide", page_title=ApplicationName)
+                                                    col1, col2 = st.columns([0.4, 0.5], gap="small")
+
+                                                    with col1:
+                                                        #st.header("Upload Test Reports PDF File")
+                                                        # uploaded_file = st.file_uploader("Please upload your test report pdf document:", type="pdf")
+
+                                                        file_URL = urllib.parse.unquote(file_URL)
+                                                        url = file_URL
+                                                        wget.download(url,
+                                                                      basePath+'/Reports/temp-'+file_Name+'.pdf')
+                                                        path = basePath+'/Reports/temp-'+file_Name+'.pdf'
+
+                                                        with open(path, 'rb') as pdf_file:
+                                                            abc = pdf_file
+                                                            pdf_content = pdf_file.read()
+                                                            uploaded_file = pdf_content
+
+                                                    if uploaded_file is not None:
+                                                        # FileType = uploaded_file.type
+                                                        FileType = "application/pdf"
+                                                        if FileType == "application/pdf":
+                                                            with col2:
+                                                                base64_data = base64.b64encode(pdf_content)
+                                                                base64_string = base64_data.decode('utf-8')
+                                                                pdf_display = f'<iframe src="data:application/pdf;base64,{base64_string}" width="600" height="1000" type="application/pdf"></iframe>'
+                                                                st.markdown(pdf_display, unsafe_allow_html=True)
+
+                                                            documents = get_pdf_text(uploaded_file)
+                                                            st.session_state.vector_store = create_vectorstore_from_texts(
+                                                                documents,
+                                                                api_key=OpenAIToken,
+                                                                file_name=file_Name)
+                                                            # Generate answer
+                                                            with col1:
+                                                                if st.button("Summarize File", key=file_Name):
+                                                                    with st.spinner("Generating answer"):
+                                                                        answer = query_document(
+                                                                            vectorstore=st.session_state.vector_store,
+                                                                            query="Read content of the document. Do not include your suggestion and analysis.",
+                                                                            api_key=OpenAIToken)
+                                                                        placeholder = st.write(answer)
+
+                                                            os.remove(path)
+                                                        else:
+                                                            st.rerun()
+                                                except Exception as e11:
+                                                    st.error(str(e11))
+                                                    if "got []" in str(e11):
+                                                        st.error("File has no text to extract")
+                                                        st.error(str(e11))
 
                         else:
                             for d in range(len(filtered_df_range)):
-                                st.link_button(label=str(filtered_df_range['Value'][d]), url=ReportLinksDic[str(filtered_df_range['Value'][d])])
+                                with  st.container(border=True):
+                                    file_URL = ReportLinksDic[str(filtered_df_range['Value'][d])]
+                                    file_Name = str(filtered_df_range['Value'][d])
+
+                                    text_for_button = 'Click on the button to download the report'
+                                    col1, col2 = st.columns([1, 1])
+                                    with col1:
+                                        st.link_button(label=file_Name, url=file_URL)
+                                    with col2:
+                                        st.text(text_for_button)
+
+                                    if st.checkbox('Display Test Report', key=d):
+                                        try:
+                                            st.set_page_config(layout="wide", page_title=ApplicationName)
+                                            col1, col2 = st.columns([0.4, 0.5], gap="small")
+
+                                            with col1:
+                                                # st.header("Upload Test Reports PDF File")
+                                                # uploaded_file = st.file_uploader("Please upload your test report pdf document:", type="pdf")
+
+                                                file_URL = urllib.parse.unquote(file_URL)
+                                                url = file_URL
+                                                wget.download(url,
+                                                              basePath + '/Reports/temp-'+file_Name+'.pdf')
+                                                path = basePath + '/Reports/temp-'+file_Name+'.pdf'
+
+                                                with open(path, 'rb') as pdf_file:
+                                                    abc = pdf_file
+                                                    pdf_content = pdf_file.read()
+                                                    uploaded_file = pdf_content
+
+                                            if uploaded_file is not None:
+                                                # FileType = uploaded_file.type
+                                                FileType = "application/pdf"
+                                                if FileType == "application/pdf":
+                                                    with col2:
+                                                        base64_data = base64.b64encode(pdf_content)
+                                                        base64_string = base64_data.decode('utf-8')
+                                                        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_string}" width="600" height="1000" type="application/pdf"></iframe>'
+                                                        st.markdown(pdf_display, unsafe_allow_html=True)
+
+                                                    documents = get_pdf_text(uploaded_file)
+                                                    st.session_state.vector_store = create_vectorstore_from_texts(
+                                                        documents,
+                                                        api_key=OpenAIToken,
+                                                        file_name=file_Name)
+                                                    # Generate answer
+                                                    with col1:
+                                                        if st.button("Summarize File", key=file_Name):
+                                                            with st.spinner("Generating answer"):
+                                                                answer = query_document(
+                                                                    vectorstore=st.session_state.vector_store,
+                                                                    query="Read content of the document. Do not include your suggestion and analysis.",
+                                                                    api_key=OpenAIToken)
+                                                                placeholder = st.write(answer)
+
+                                                    os.remove(path)
+                                                else:
+                                                    st.rerun()
+                                        except Exception as e11:
+                                            st.error(str(e11))
+                                            if "got []" in str(e11):
+                                                st.error("File has no text to extract")
+                                                st.error(str(e11))
 
                     except Exception as e:
                         st.error("Token is invalid. Please enter a valid token to be authorized to run the test cases.")
                         st.text(str(e))
 
-            elif st.checkbox('Summarize Test Reports'):
-                try:
-                    st.set_page_config(layout="wide", page_title=ApplicationName)
-                    col1, col2 = st.columns([0.5, 0.5], gap="large")
-
-                    with col1:
-                        st.header("Upload Test Reports PDF File")
-                        uploaded_file = st.file_uploader("Please upload your test report pdf document:", type="pdf")
-
-                    if uploaded_file is not None:
-                        st.text(uploaded_file.type)
-                        FileType = uploaded_file.type
-                        st.text(FileType)
-                        if FileType == "application/pdf":
-                            with col2:
-                                bytes_data = uploaded_file.getvalue()
-                                base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
-                                pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="600" height="1000" type="application/pdf"></iframe>'
-                                st.markdown(pdf_display, unsafe_allow_html=True)
-
-                            documents = get_pdf_text(uploaded_file)
-                            st.session_state.vector_store = create_vectorstore_from_texts(documents,
-                                                                                          api_key=OpenAIToken,
-                                                                                          file_name=uploaded_file.name.strip())
-                            # Generate answer
-                            with col1:
-                                if st.button("Summarize File"):
-                                    with st.spinner("Generating answer"):
-                                        answer = query_document(vectorstore=st.session_state.vector_store,
-                                                                query="Analyse the document",
-                                                                api_key=OpenAIToken)
-                                        placeholder = st.write(answer)
-                        else:
-                            st.rerun()
-
-                except Exception as e11:
-                    st.error(str(e11))
-                    if "got []" in str(e11):
-                        st.error("File has no text to extract")
-                        st.error(str(e11))
             else:
                 agree = st.checkbox(
                     "Any concern? such as 1) Excluding yourself from the list of recipients or 2) Want to be a recipient for the test results? 3) Other Concern. Send a request below")
@@ -303,6 +389,45 @@ class aaa:
 
             if st.button("Reload Page", type="primary"):
                 st.rerun()
+
+            st.text("")
+            st.text("")
+            original_title = '<p style="font-family:Courier; color:Orange; font-size: 10px;">Powered by Streamlit: 1.46.1 , OpenAI: 1.91.0</p>'
+            st.markdown(original_title, unsafe_allow_html=True)
+
+            col1, col2 = st.columns([1, 6])
+            with col1:
+                st.html("""
+                        <a href="https://streamlit.io/">
+                        <img src="https://raw.githubusercontent.com/NeerajBIG/ExtraDataBitsinglass/main/streamlit.png" width="80" height="40" ALIGN="CENTER">
+                        </a>
+                        """
+                )
+            with col2:
+                st.html("""
+                        <a href="https://openai.com/">
+                        <img src="https://raw.githubusercontent.com/NeerajBIG/ExtraDataBitsinglass/main/openai.png" width="120" height="40" ALIGN="LEFT">
+                        </a>
+                        """
+                )
+
+            st.markdown(
+                """
+                <style>
+                    .stProgress > div > div > div > div {
+                        background-color: green;
+                    }
+                </style>""",
+                unsafe_allow_html=True,
+            )
+            progress = st.progress(0)
+
+            for i in range(100):
+                if i == 50:
+                    progress.empty()
+                    break
+                progress.progress(i)
+                time.sleep(0.1)
 
     except Exception as e11:
         st.error(str(e11))

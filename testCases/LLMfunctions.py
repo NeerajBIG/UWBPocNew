@@ -12,7 +12,6 @@ import uuid
 import pandas as pd
 import re
 
-
 def clean_filename(filename):
     # Regular expression to find "(number)" pattern
     new_filename = re.sub(r'\s\(\d+\)', '', filename)
@@ -23,7 +22,9 @@ def get_pdf_text(uploaded_file):
     temp_file = ""
     try:
         # Read file content
-        input_file = uploaded_file.read()
+        #input_file = uploaded_file.read()
+
+        input_file = uploaded_file
 
         # Create a temporary file (PyPDFLoader requires a file path to read the PDF,
         # it can't work directly with file-like objects or byte streams that we get from Streamlit's uploaded_file)
@@ -41,7 +42,6 @@ def get_pdf_text(uploaded_file):
         # Ensure the temporary file is deleted when we're done with it
         os.unlink(temp_file.name)
 
-
 def split_document(documents, chunk_size, chunk_overlap):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size,
                                                    chunk_overlap=chunk_overlap,
@@ -50,13 +50,11 @@ def split_document(documents, chunk_size, chunk_overlap):
 
     return text_splitter.split_documents(documents)
 
-
 def get_embedding_function(api_key):
     embeddings = OpenAIEmbeddings(
         model="text-embedding-ada-002", openai_api_key=api_key
     )
     return embeddings
-
 
 def create_vectorstore(chunks, embedding_function, file_name, vector_store_path="db"):
     # Create a list of unique ids for each document based on the content
