@@ -17,9 +17,14 @@ def setup():
 
     driver = None
     if Run_Mode == "Local":
-        service = Service()
-        options = webdriver.ChromeOptions()
-        driver = webdriver.Chrome(service=service, options=options)
+        # service = Service()
+        # options = webdriver.ChromeOptions()
+        # driver = webdriver.Chrome(service=service, options=options)
+        GridHUB_URL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "GridHUB_URL")
+        print("GridHUB_URL: ", GridHUB_URL)
+        selenium_grid_url = GridHUB_URL + "/wd/hub"
+        driver = webdriver.Remote(options=webdriver.ChromeOptions(), command_executor=selenium_grid_url)
+
 
     elif Run_Mode == "Server":
         GridHUB_URL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "GridHUB_URL")

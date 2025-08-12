@@ -531,6 +531,7 @@ class aaa:
 
             client = OpenAI(
                 api_key=OpenAIToken)
+
             # Setting messages in the session
             if "messages" not in st1.session_state:
                 st1.session_state.messages = []
