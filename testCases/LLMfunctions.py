@@ -103,7 +103,8 @@ def load_vectorstore(file_name, api_key, vectorstore_path="db"):
 PROMPT_TEMPLATE = """
 You are an assistant for question-answering tasks.
 Use the following pieces of retrieved context to answer
-the question. If you don't know the answer, say that you
+the question. Answer by reading content from the file. Do not assume anything.
+If you don't know the answer, say that you
 don't know. DON'T MAKE UP ANYTHING.
 
 {context}
@@ -132,7 +133,7 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 def query_document(vectorstore, query, api_key):
-    llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key)
+    llm = ChatOpenAI(model="gpt-4o", api_key=api_key)
 
     retriever = vectorstore.as_retriever(search_type="similarity")
 

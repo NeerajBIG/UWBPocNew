@@ -285,24 +285,42 @@ class ElementLocators:
 
         lp1 = testResult()
 
-        finalDic = lp1.testResultMeth("None", "None", "None", "None")
+        finalDic = lp1.testResultMeth("None", "None", "None", "None", "None")
         # for key, value in finalDic:
         dicKeys = list(finalDic.keys())[:200]
+
+        # --Also Generating Test Summary
+        TotalCounter = 0
+        PassedCounter = 0
+        FailedCounter = 0
+
         for i in range (1, len(dicKeys)+1):
             pdf.set_font('Arial', '', 10)
             pdf.set_text_color(0, 0, 0)
             if str(dicKeys[i-1]) != "None":
-                pdf.multi_cell(0, 5, "* "+ str(dicKeys[i-1]), 0, 'L')
+                pdf.multi_cell(0, 5, str(dicKeys[i-1]), 0, 'L')
+                lines = str(finalDic[dicKeys[i - 1]].split('^-^')[3]).splitlines()
+                filtered_list = list(filter(str.strip, lines))
+                for item in filtered_list:
+                    pdf.multi_cell(0, 5, "* "+item.strip(), 0, 'L')
+
+                pdf.set_font('Arial', '', 10)
+                pdf.multi_cell(0, 5, " ", 0, 'L')
                 if str(finalDic[dicKeys[i - 1]].split('^-^')[0]) == "Passed":
                     pdf.set_text_color(0, 128, 0)
+                    PassedCounter = PassedCounter + 1
                 elif str(finalDic[dicKeys[i - 1]].split('^-^')[0]) == "Failed":
                     pdf.set_text_color(255, 0, 0)
+                    FailedCounter = FailedCounter + 1
                 pdf.multi_cell(0, 5, "Result: " + str(finalDic[dicKeys[i - 1]].split('^-^')[0]), 0,
                            'L')
                 if str(finalDic[dicKeys[i - 1]].split('^-^')[1]) == "None":
                     pdf.image(basePath+'/utilities/None.png', h=20, link=basePath+'/utilities/None.png')
+                    TotalCounter = TotalCounter - 1
                 else:
                     pdf.image(basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png", h=20, link=basePath+"/Screenshots/"+str(finalDic[dicKeys[i - 1]].split('^-^')[1])+".png")
+                    TotalCounter = TotalCounter + 1
+
                 pdf.set_text_color(0, 0, 0)
                 pdf.set_font('Arial', '', 7)
                 pdf.multi_cell(0, 4, "Right click on image and select Open link in new tab", 0, 'L')
@@ -315,9 +333,22 @@ class ElementLocators:
                 pdf.set_text_color(211, 211, 211)
                 pdf.multi_cell(0, 5, "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 0, 'L')
 
+        pdf.cell(0, 10, txt=" ", ln=True, align='L')
+        pdf.set_font('Arial', 'B', 20)
+        page_width = pdf.w - 2 * pdf.l_margin
+        section_width = page_width / 3
+        pdf.set_text_color(0, 76, 153)
+        pdf.cell(w=section_width, h=10, txt="Total Tests: " + str(TotalCounter), ln=0, align="C")
+        pdf.set_text_color(0, 76, 153)
+        pdf.cell(w=section_width, h=10, txt="Passed: " + str(PassedCounter), ln=0, align="C")
+        pdf.set_text_color(0, 76, 153)
+        pdf.cell(w=section_width, h=10, txt="Failed: " + str(FailedCounter), ln=1, align="C")
+
+
         # --Bottom left side section
         pdf.set_font('Arial', 'B', LeftSectionSize)
-        pdf.cell(0, 15, txt=" ", ln=True, align='L')
+        pdf.set_text_color(0, 0, 0)
+        pdf.cell(0, 5, txt=" ", ln=True, align='L')
         pdf.cell(0, 5, txt="Note: ", ln=True, align='L')
         pdf.cell(0, 5, txt="1) Python version: 3.11", ln=True, align='L')
         pdf.cell(0, 5, txt="2) Jenkins version: 2.514", ln=True, align='L')

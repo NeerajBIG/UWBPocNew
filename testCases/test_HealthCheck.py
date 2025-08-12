@@ -66,7 +66,14 @@ class Test_HealthCheck:
         if Enable is True:
             try:
                 # ---------Entering Username
-                self.testStep = "To verify data input to username field"
+                self.testStep = "To ensure proper handling and acceptance of input within the username field."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 self.user = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Data,
                                                          "username_" + self.Env)
@@ -77,7 +84,7 @@ class Test_HealthCheck:
                                                              "textbox_username_id")
                     self.lp.inputData(locator, self.user)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -86,18 +93,26 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
+
                 # ---------Entering Password
-                self.testStep = "To verify data input to password field"
+                self.testStep = "To ensure proper handling and acceptance of input within the password field."
+                self.testPoints = """
+                This is step 11
+                This is step 22
+                This is step 33
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
                                                            "textbox_password_id")
                     self.lp.inputData(locator, self.password)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -106,11 +121,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
+
                 # ---------Clicking Login button
-                self.testStep = "Clicking Login button"
+                self.testStep = "Initiating the login sequence via the Login button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -119,7 +142,7 @@ class Test_HealthCheck:
                                                            "button_login_xpath")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -128,12 +151,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
+
 
                 time.sleep(1)
                 # ---------Clicking Home link text
-                self.testStep = "Clicking Home link text"
+                self.testStep = "Initiating navigation via the 'Home' text link."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -143,7 +174,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_home")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -152,13 +183,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
-                self.driver.close()
+
                 time.sleep(1)
                 # ---------Clicking Cases link text
-                self.testStep = "Clicking Cases link text"
+                self.testStep = "Interacting with the Cases link text"
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -168,7 +206,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_Cases")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : "+str(locator)
                     EndTime = datetime.now()
@@ -176,12 +214,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
+
 
                 time.sleep(1)
                 # ---------Clicking Users link text
-                self.testStep = "Clicking Users link text"
+                self.testStep = "Selecting the Users link text"
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -191,7 +237,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_Users")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -200,12 +246,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Monitoring link text
-                self.testStep = "Clicking Monitoring link text"
+                self.testStep = "Clicking Monitoring hyperlink text"
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -215,7 +268,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_Monitoring")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -224,12 +277,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Notes link text
                 self.testStep = "Clicking Notes link text"
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -239,7 +299,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_Notes")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -248,13 +308,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 #----------Inside Case Numbers---------
                 time.sleep(1)
                 # ---------Clicking Home link text
-                self.testStep = "Clicking Home link text"
+                self.testStep = "Navigating back to Home"
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -264,7 +331,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_home")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -273,13 +340,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ----------Clicking Case Number (Unassigned)
                 time.sleep(1)
                 # ---------Clicking Case Number  link text
-                self.testStep = "Clicking Case Number  link text"
+                self.testStep = "Selecting the 'Case Number' navigation link."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -290,7 +364,7 @@ class Test_HealthCheck:
                                                                                    "LinkText_CaseNumberUnassigned")
                     self.lp.performClick(locator + Data, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -299,12 +373,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Summary tab
-                self.testStep = "Clicking Summary tab"
+                self.testStep = "Clicking Summary tab to verify its content."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -314,7 +395,7 @@ class Test_HealthCheck:
                                                                                    "button_Summary")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -323,12 +404,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Documents tab
-                self.testStep = "Clicking Documents tab"
+                self.testStep = "Clicking Documents tab to verify its content."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -338,7 +426,7 @@ class Test_HealthCheck:
                                                                                    "button_Documents")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -347,12 +435,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Communication tab
-                self.testStep = "Clicking Communication tab"
+                self.testStep = "Clicking Communication tab to verify its content."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -362,7 +457,7 @@ class Test_HealthCheck:
                                                                                    "button_Communication")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -371,12 +466,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking Notes tab
-                self.testStep = "Clicking Notes tab"
+                self.testStep = "Clicking Notes tab to verify its content."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -386,7 +488,7 @@ class Test_HealthCheck:
                                                                                    "button_Notes")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -395,12 +497,19 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 time.sleep(1)
                 # ---------Clicking SmartIngestionAudit tab
-                self.testStep = "Clicking SmartIngestionAudit tab"
+                self.testStep = "Clicking SmartIngestionAudit tab to verify its content."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -410,7 +519,7 @@ class Test_HealthCheck:
                                                                                    "button_SmartIngestionAudit")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -419,13 +528,20 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 #----------Sections inside Summary Tab
                 time.sleep(1)
                 # ---------Clicking Summary tab
-                self.testStep = "Clicking Summary tab"
+                self.testStep = "Navigating back to Summary tab."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -435,7 +551,7 @@ class Test_HealthCheck:
                                                                                    "button_Summary")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -444,11 +560,18 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Clicking Program Filing-Preparation Button
-                self.testStep = "Clicking Program Filing-Preparation Button"
+                self.testStep = "Interacting with the 'Program Filing-Preparation' control button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -458,7 +581,7 @@ class Test_HealthCheck:
                                                                                    "button_ProgramFilingPreparation")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -467,11 +590,18 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Clicking Upfront Analysis Button
-                self.testStep = "Clicking Upfront Analysis Button"
+                self.testStep = "Interacting with the 'Upfront Analysis' button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -481,7 +611,7 @@ class Test_HealthCheck:
                                                                                    "button_UpfrontAnalysis")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -490,11 +620,18 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Clicking In-depth Analysis Button
-                self.testStep = "Clicking In-depth Analysis Button"
+                self.testStep = "Interacting with the 'In-depth Analysis' button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -504,7 +641,7 @@ class Test_HealthCheck:
                                                                                    "button_In-depthAnalysis")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -513,11 +650,18 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Clicking Negotiation & Quotation Button
-                self.testStep = "Clicking Negotiation & Quotation Button"
+                self.testStep = "Interacting with the 'Negotiation & Quotation' button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -527,7 +671,7 @@ class Test_HealthCheck:
                                                                                    "button_Negotiation&Quotation")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -536,11 +680,18 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Clicking Authorization Refusal Button
-                self.testStep = "Clicking Authorization Refusal Button"
+                self.testStep = "Interacting with the 'Authorization Refusal' button."
+                self.testPoints = """
+                This is step 1.
+                This is step 2.
+                This is step 3.
+                """
+                lines = self.testPoints
+
                 screenshotName = self.testStep.replace(" ", "")
                 try:
                     locator = XLUtils.readDataTestUserData(self.dataSheetPath, self.sheetName_Locators,
@@ -550,7 +701,7 @@ class Test_HealthCheck:
                                                                                    "button_AuthorizationRefusal")
                     self.lp.performClick(locator, locatorConfirmation)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException")
+                    self.lp1.testResultMeth(self.testStep, "Passed", screenshotName, "NoException", lines)
                 except:
                     self.error = "No web element found for test step - : [ " + self.testStep + " ].  Element locator used - : " + str(
                         locator)
@@ -559,7 +710,7 @@ class Test_HealthCheck:
                     XLUtils.writeDataReport(self.dataSheetPath, self.sheetName_Report, scenario_ID,
                                             scenarioDataList[1], self.testStep, self.errorMessage, StartTime, EndTime)
                     self.lp.takeScreenshot(screenshotName)
-                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage)
+                    self.lp1.testResultMeth(self.testStep, "Failed", screenshotName, self.errorMessage, lines)
                     #raise Exception
 
                 # ---------Ending the test scenario
@@ -570,6 +721,7 @@ class Test_HealthCheck:
                 time.sleep(2)
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
                 self.driver.close()
+
             except:
                 print("Inside Exception-----2")
                 self.lp.createPDaF(ScenarioName+" - "+scenario_ID, ScenarioTitle)
@@ -577,4 +729,5 @@ class Test_HealthCheck:
                 assert False
 
         else:
+
             print("Skipping Scenario Execution for: " + scenarioDataList[0])
