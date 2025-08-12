@@ -20,9 +20,11 @@ def setup():
 
     driver = None
     if Run_Mode == "Local":
-        service = Service()
-        options = webdriver.ChromeOptions()
-        driver = webdriver.Chrome(service=service, options=options)
+        # service = Service()
+        # options = webdriver.ChromeOptions()
+        # driver = webdriver.Chrome(service=service, options=options)
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service)
 
 
     elif Run_Mode == "Server":
