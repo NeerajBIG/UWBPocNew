@@ -23,6 +23,8 @@ def setup():
         # service = Service()
         # options = webdriver.ChromeOptions()
         # driver = webdriver.Chrome(service=service, options=options)
+
+        # Latest code to automatically download latest chrome driver
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service)
 

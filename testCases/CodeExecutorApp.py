@@ -122,7 +122,7 @@ class aaa:
                 if authorizationChecker == 1:
                     scenario_ID = "SC_001"
                     jenkinsBaseUrl = 'http://localhost:8080/buildByToken/build?job='
-                    job = 'UWB_HealthCheck'
+                    job = 'UWB_SC_001'
                     url = jenkinsBaseUrl + job + '&token=bitsinglasstestjobs'
 
                     AllScenarios = XLUtils.getAllScenarios(dataSheetPath, sheetName_Scenarios)
