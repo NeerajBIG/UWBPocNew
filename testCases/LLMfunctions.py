@@ -112,6 +112,14 @@ don't know. DON'T MAKE UP ANYTHING.
 Answer the question based on the above context: {question}
 """
 
+# PROMPT_TEMPLATE = """
+# You are an assistant for question-answering tasks.
+# Use the following pieces of retrieved context to answer
+# the question. Read the information thoroughly. Get the exact answers from the data. Do not assume anything and provide answer from the data.
+# {context}
+# ---
+# Answer the question based on the above context: {question}
+# """
 
 class AnswerWithSources(BaseModel):
     """An answer to the question, with sources and reasoning."""
@@ -123,7 +131,7 @@ class AnswerWithSources(BaseModel):
 class ExtractedInfoWithSources(BaseModel):
     Report_Title: AnswerWithSources
     Report_Summary: AnswerWithSources
-    Report_Date: AnswerWithSources
+    Report_Timestamp: AnswerWithSources
     Test_Results_Overview: AnswerWithSources
     Test_Results_Count_Passed: AnswerWithSources
     Test_Results_Count_Failed: AnswerWithSources
