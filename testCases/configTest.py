@@ -1,10 +1,13 @@
 import os
 from selenium import webdriver
+
 import pytest
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from utilities.readProperties import ReadConfig
 from utilities import XLUtils
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 @pytest.fixture()
 def setup():
@@ -20,6 +23,7 @@ def setup():
         service = Service()
         options = webdriver.ChromeOptions()
         driver = webdriver.Chrome(service=service, options=options)
+
 
     elif Run_Mode == "Server":
         GridHUB_URL = XLUtils.readDataConfig(dataSheetPath, sheetName_Config, "GridHUB_URL")
