@@ -530,7 +530,7 @@ class aaa:
             from datetime import datetime
 
             client = OpenAI(
-                api_key="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")
+                api_key=OpenAIToken)
 
             # Setting messages in the session
             if "messages" not in st1.session_state:
