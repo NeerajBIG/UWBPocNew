@@ -1,7 +1,11 @@
 import os, sys
-from os.path import dirname, join, abspath
-#import tzlocal
-sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(current_dir, '..', 'src'))
+
+# from os.path import dirname, join, abspath
+# sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+
 from datetime import datetime
 import inspect
 from selenium.webdriver.common.by import By
