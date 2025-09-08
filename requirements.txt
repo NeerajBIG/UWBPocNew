@@ -14,3 +14,4 @@ streamlit~=1.46.1
 PyGithub~=2.4.0
 gitdb~=4.0.12
 wget~=3.2
+openai~=1.98.0
