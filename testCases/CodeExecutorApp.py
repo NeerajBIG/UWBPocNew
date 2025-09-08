@@ -1,11 +1,15 @@
 import datetime
 import sys
+import os
 import time
 from os.path import dirname, join, abspath
 import wget
 from openai import OpenAI
 
-sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(current_dir, '..', 'src'))
+
+#sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
 import streamlit as st
 import streamlit as st1
