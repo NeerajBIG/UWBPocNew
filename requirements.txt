@@ -11,7 +11,6 @@ matplotlib~=3.9.2
 pyjavaproperties~=0.7
 tzlocal~=5.3.1
 pytest-html~=4.1.1
-streamlit~=1.46.1
 PyGithub~=2.4.0
 gitdb~=4.0.12
 wget~=3.2
