@@ -6,8 +6,9 @@ from os.path import dirname, join, abspath
 import wget
 from openai import OpenAI
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_dir, '..', 'src'))
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# sys.path.append(os.path.join(current_dir, '..', 'src'))
+sys.path.append(os.path.dirname(os.path.abspath(__file__))+"../")
 
 #sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 from github import Github
